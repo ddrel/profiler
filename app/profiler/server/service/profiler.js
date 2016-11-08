@@ -7,6 +7,10 @@ module.exports = (app)=>{
         profiler.getsurvey(req,res);
     });
 
+    app.get('/ws/profiler/getprofileranswer',(req,res)=>{
+        profiler.getprofileranswer(req,res);
+    });
+
     app.post('/ws/profiler/save',(req,res)=>{
         profiler.savebulkAnswerProfiler(req,res);
     });
