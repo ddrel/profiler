@@ -1,0 +1,66 @@
+<div class="wrapper wrapper-content" ng-controller="surveyController" ng-init="init()" ngCloak>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <div class="col-md-10">
+                <h5>Questionnaire</h5>
+            </div>           
+        </div>
+        <div class="ibox-content">
+            <div class="jumbotron questionclass" style="padding:0px">
+                <div style="display:none" id="questionnaire_template" class="well" ngCloak>
+                        <p>Question: <i class="ng-binding">"{{broadcastedQuestion.question.title}}"</i></p>
+                        <p></p>                                            
+                         <ol style="list-style:none">
+                            <li ng-repeat="item in broadcastedQuestion.question.items">
+                                <h3 ng-if="broadcastedQuestion.question.type=='single'"><input  type="radio" class="i-question iradio_square-green" name="group-question" ng-model="selectedAnswer" ng-click="setSingleAnswer(item)" value="item.value"></input>  {{item.value}}.   {{item.text}}</h3>
+                                <h3 ng-show="broadcastedQuestion.question.type=='multi'"><input type="checkbox" class="i-question icheckbox_square-green"  ng-model="_itemSelected" ng-click="setMultiAnswer(item,_itemSelected)"></input>  {{item.value}}.   {{item.text}}</h3>                                     
+                            </li>   
+                        </ol>
+                        <p ng-show="broadcastedQuestion.question.type=='free'"><textarea style="resize:vertical" ng-model="txtanswer" ng-change="ontextChange(txtanswer)" name="textarea" class="form-control"></textarea></p>                        
+                        <p></p>
+                        <p>
+                            <a class="btn btn-primary btn-w-m" ng-click="sendanswer()" role="button">Submit</a>
+                        </p> 
+                </div>                
+                <div style="display:none" id="answeredquestion_template" class="well" ngCloak>
+                    <p>Question: <i class="ng-binding">"{{broadcastedQuestion.question.title}}"</i></p> 
+                     <p ng-if="broadcastedQuestion.question.type=='multi'">
+                     <b>Your Answer: &nbsp;</b>                                         
+                        <ol ng-if="broadcastedQuestion.question.type=='multi'" style="list-style:none;">
+                            <li ng-repeat="ans in answeredQuestion.answer">
+                                <font size="5">{{ans.value}}.   {{ans.text}}</font>                                                                     
+                            </li>   
+                        </ol>
+                    </p>
+                    <p ng-if="broadcastedQuestion.question.type=='single'">                                
+                        <b>Your Answer: &nbsp;</b><font size="5">{{answeredQuestion.answer.value}}.   {{answeredQuestion.answer.text}}</font>
+                    </p>
+                    <p ng-if="broadcastedQuestion.question.type=='free'">                                
+                        <b>Your Answer: &nbsp;</b>
+                        </br>
+                        <font size="4"><span>{{answeredQuestion.answer}}</span></font>
+                    </p>                                                         
+                    <p>
+                        <a class="btn btn-primary btn-w-m" ng-click="modifyAnswer()" role="button">Modify</a>
+                    </p>                                       
+                </div> 
+            </div>           
+        </div>
+    </div>
+</div>
+</div>
+<!-- iCheck -->
+<script src="/common/js/plugins/iCheck/icheck.min.js"></script>
+<link href="/common/css/plugins/iCheck/custom.css" rel="stylesheet">
+<script>
+ /*   
+       $(document).ready(function(){
+        $('.i-checksEvent-question').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+   */ 
+</script>
+

@@ -1,0 +1,55 @@
+<div class="wrapper wrapper-content" ng-controller="questController" ng-init="init()">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <div class="col-md-7">
+                <h5>Manage Questionnaire</h5>
+            </div>           
+        </div>
+        <div class="ibox-content">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-1">
+                            <label class=" control-label">Events:</label>
+                        </div>                       
+                        <div class="col-md-4">                
+                            <select style="margin-top:0px" class="form-control" required ng-model="selectedEvent" ng-change="onEventsChange()" ng-options="events as events.title for events in eventsCollection" style="width : 100%;">
+                            </select>                                
+                        </div>
+                        <div class="col-md-2">
+                            <button type="submit" ng-disabled="selectedEvent==null" ng-click="addquestionnaire()" class="btn btn-primary">Add Questionnaire</button>
+                        </div>                       
+                    </div>                   
+                </div>                
+                </div>
+            </form>   
+        </div>           
+        <div class="ibox-content">
+             <table class="table table-hover no-margins" data-ng-show="selectedEvent.questionnaire.length>0">
+                <thead>
+                <tr>
+                    <th>Question</th>
+                    <th>Type</th>                                        
+                    <th class="text-center pull-right">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr style="font-size:12px" class="ng-scope" 
+                    ng-repeat="item in selectedEvent.questionnaire">
+                        <td>{{item.title}}</td>
+                        <td>{{item.type}}</td>                                        
+                        <td class="text-center">
+                            <a style="margin-left:2px" class="btn btn-danger btn-xs pull-right" 
+                            ng-click="deleteItem(item,$index)"><i class="fa fa-times-circle"></i> Delete </a>
+                            <a class="btn btn-primary btn-xs pull-right" ng-click="updatequestionnaire(item)"><i class="fa fa-pencil"></i> Update </a>                            
+                        </td>
+                </tr>
+                </tbody>
+            </table>           
+           
+        </div>
+    </div>
+</div>
+</div>

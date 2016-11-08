@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FCC Live Stats</title>
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" href="/common/css/style.css"/>
+  <link rel="stylesheet" href="/common/css/animate.css"/>
+
+    <!-- Mainly scripts -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>    
+    <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
+    
+    
+
+    <!-- Angular -->
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-router-styles/ui-router-styles.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+    <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    
+     <!-- socket -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>  
+  
+    <!-- Custom and plugin javascript -->
+    <script src="/common/js/inspinia.js"></script>    
+    <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/common/js/plugins/pace/pace.min.js"></script>
+    <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/common/js/plugins/ui-sortable/sortable.js"></script>     
+    <script src="/socket.io/socket.io.js"></script> 
+
+    <script>       
+        var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','ui.sortable','chart.js']);
+        FCC.factory('public_socket', ['$rootScope', function($rootScope) {
+            var socket = io.connect("http://<%=  ipaddress %>");
+            return {
+                on: function(eventName, callback){
+                socket.on(eventName, callback);
+                },
+                emit: function(eventName, data) {
+                socket.emit(eventName, data);
+                }
+            };
+            }]);
+    </script>  
+    <script>
+        //$(function() {
+        //    var public_socket = io();
+        //})            
+    </script>
+      <!-- Angular factory --> 
+    <script src="/common/utils/utils.js"></script>
+    <script  src="/pubpage/controllers/statschart.js"></script>
+
+</head>
+<body class="gray-bg" ng-app="FCC" ng-controller="publicController" ng-init="init()">
+<div class="wrapper wrapper-content  animated fadeInRight">
+    <div class="row" id="sortable-view">
+        <div class="col-lg-6 connectPanels" ui-sortable="sortableOptions">
+            <div class="ibox ">
+                <div class="ibox-title">                        
+                    <div class="col-md-3">
+                    <h5>Responded: <font size="4" color="#ed5565">{{ respondedtoquestion.length || 0}}</font></h5>
+                    </div>                    
+                </div>               
+            </div>
+            <div class="ibox">                
+                <div class="ibox-content">
+                    <div class="well">
+                        <p>Question: <i>"{{currentQuestion.title}}"</i></p>                                            
+                        <ol style="list-style:none">
+                            <li ng-repeat="item in currentQuestion.items">
+                                {{item.value}}.  {{item.text}} 
+                            </li>   
+                        </ol>
+                    </div>                   
+                </div>
+            </div>                    
+        </div>
+
+        <div class="col-lg-6 connectPanels" ui-sortable="sortableOptions">           
+            <div class="ibox" ng-if="currentQuestion.type!='free'">
+                <div class="ibox-title">
+                    <h5>Live Stats:</h5>
+                </div>                                      
+                <div class="ibox-content">
+                    <div class="row" style="margin-top:-14px">
+                    <table class="table table-bordered no-margins">
+                        <thead>
+                            <tr>
+                                <td>Answers</td>
+                                <td>Count</td>
+                                <td></td>
+                            </tr>    
+                        </thead>
+                        <tr ng-repeat="cd in chartData">
+                            <td>{{cd.value}}. {{cd.text}}</td>
+                            <td style="text-align:end">{{cd.count}}</td>
+                            <td style="width:20px;text-align:end">{{ getPercent(cd.count,chart.total)}}</td>
+                        </tr>     
+                    </table>
+                    </div>
+                    </br>    
+                    <div class="row">                        
+                            <canvas class="chart chart-doughnut"
+                                  chart-data="chart.data" chart-labels="chart.labels"
+                                  responsive="true">
+                            </canvas>   
+                    </div>                     
+                </div>
+            </div>            
+             <div class="ibox" ng-if="currentQuestion.type=='free'">
+                <div class="ibox-title">
+                    <h5>Answer List:</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="well">                                                                                            
+                        <ol style="list-style:none;padding:0;">
+                            <li ng-repeat="respond in respondedtoquestion">
+                                <blockquote>
+                                <p>{{respond.answer}}</p>
+                                <small><strong>{{respond.user_id.name}}</strong> <!--in <cite title="" data-original-title="">Book name</cite>--></small>
+                                </blockquote> 
+                            </li>   
+                        </ol>
+                    </div>                   
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="footer fixed" style="margin-left:0px !important">
+          <div class="pull-right">
+              <strong>FCC-Inspiring Woman In Interprise</strong>
+          </div>
+          <div>
+              <strong>Copyright</strong> IBM FCC&copy; 2016
+          </div>
+      </div>
+</body>
+</html>

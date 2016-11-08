@@ -1,0 +1,56 @@
+<div class="wrapper wrapper-content" ng-controller="eventsController" ng-init="init()">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <div class="col-md-10">
+                <h5>Manage Events</h5>
+            </div>
+            <div class="col-md-2">
+                <a class="btn btn-primary btn-xs pull-right" ng-click="add()"><i class="fa fa-plus"></i> Add Event</a>
+            </div>
+        </div>
+        <div class="ibox-content">           
+            <table class="table table-hover no-margins" data-ng-show="eventsCollection.length > 0">
+                <thead>
+                <tr>
+                    <th>Events Title</th>
+                    <th>Description</th> 
+                    <th>Event Date</th>                   
+                    <th>Active</th>
+                    <th class="text-center pull-right">Action</th>
+                </tr>
+                <!--
+                <tr>
+                    <th>
+                        <input style="margin-left:-4px" type="text" placeholder="Search" ng-model="search.title"  class="input form-control">
+                        </input>
+                    </th>
+                    <th></th>
+                    <th>
+                        <input style="margin-left:-26px" type="checkbox" ng-model="search.active"  class="input form-control">
+                        </input>
+                    </th>
+                    <th></th>
+                </tr>
+                -->
+                </thead>
+                <tbody>
+                <tr style="font-size:12px" class="ng-scope" 
+                    ng-repeat="event in eventsCollection | filter : search">
+                        <td>{{event.title}}</td>
+                        <td>{{event.description}}</td>
+                        <td>{{formatDate(event.event_date)}}</td>                    
+                        <td>{{formatBool(event.active)}}</td>                
+                        <td class="text-center">
+                            <a style="margin-left:2px" class="btn btn-danger btn-xs pull-right" 
+                            ng-click="deleteEvent(event,$index)"><i class="fa fa-times-circle"></i> Delete </a>
+                            <a class="btn btn-primary btn-xs pull-right" ng-click="update(event)"><i class="fa fa-pencil"></i> Update </a>
+                            
+                        </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

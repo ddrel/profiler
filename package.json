@@ -1,0 +1,51 @@
+{
+  "name": "form_generator",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app.js",
+    "test": "test"
+  },
+  "dependencies": {
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.14.2",
+    "connect-assets": "^5.1.0",
+    "connect-mongo": "^1.1.0",
+    "cookie": "^0.3.1",
+    "cookie-parser": "^1.4.1",
+    "dotenv": "^2.0.0",
+    "errorhandler": "^1.4.3",
+    "express": "^4.13.4",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.13.0",
+    "express-validator": "^2.19.1",
+    "lodash": "^4.2.1",
+    "method-override": "^2.3.5",
+    "mongoose": "^4.4.2",
+    "nodemailer": "^2.1.0",
+    "passport": "0.3.2",
+    "passport-custom": "^1.0.5",
+    "passport-facebook": "^2.1.0",
+    "passport-github": "^1.1.0",
+    "passport-google-oauth": "^1.0.0",
+    "passport-instagram": "^1.0.0",
+    "passport-linkedin-oauth2": "^1.4.0",
+    "passport-local": "^1.0.0",
+    "passport-oauth": "^1.0.0",
+    "passport-openid": "^0.4.0",
+    "passport-twitter": "^1.0.4",
+    "request": "^2.69.0",
+    "socket.io": "^1.4.8",
+    "swig": "^1.4.2",
+    "walk": "^2.3.9",
+    "websocket": "^1.0.23",
+    "ws": "^1.1.1"
+  },
+  "devDependencies": {
+    "blessed": "^0.1.81",
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5",
+    "multiline": "^1.0.2",
+    "supertest": "^1.1.0"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,143 @@
+<div  class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <div class="col-md-10">
+                <h5>Dashboard</h5>
+            </div>           
+        </div>        
+    </div>
+</div>
+</div>
+<div class="wrapper wrapper-content  animated fadeInRight" ng-controller="mainHomeController" ng-init="init()">
+    <div class="row" id="sortable-view">
+        <div class="col-lg-6 connectPanels" ui-sortable="sortableOptions">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Broadcast Event/Questionnaire:</h5>
+                    <div class="ibox-tools">
+                        <button ng-disabled="selectedEvent==null || published.event_ref==selectedEvent._id" ng-click="setpublished()" class="btn btn-primary btn-xs pull-right">Publish Now</button>
+                    </div>
+                </div>
+                <div class="ibox-content">
+                  <form class="form-horizontal">
+                        <div class="form-group">
+                            <div class="col-sm-12">
+                            <div class="row">                                                   
+                                <div class="col-md-12">                
+                                    <select style="margin-top:0px" class="form-control" required ng-model="selectedEvent" ng-change="onEventsChange()" ng-options="events as events.title for events in eventsCollection" style="width : 100%;">
+                                    </select>                                
+                                </div>                                                   
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+                                 <table class="table table-hover no-margins" data-ng-show="selectedEvent.questionnaire.length>0">
+                                <thead>
+                                <tr>
+                                    <th></th>    
+                                    <th>Question</th>
+                                    <th>Type</th>                                        
+                                    <th class="text-center pull-right">Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr style="font-size:12px" class="ng-scope" 
+                                    ng-repeat="item in selectedEvent.questionnaire">
+                                        <td><div style="width:20px;background-image:url('/common/images/checkmark-256x256.gif')"></div></td>
+                                        <td>{{item.title}}</td>
+                                        <td>{{item.type}}</td>                                        
+                                        <td class="text-center">
+                                            <button ng-disabled="currentQuestion._id==item._id" ng-if="published.event_ref==selectedEvent._id" class="btn btn-primary btn-xs pull-right" ng-click="broadcastSelected(item)"><i class="fa fa-bullhorn"></i> Broadcast</button>                            
+                                        </td>
+                                </tr>
+                                </tbody>
+                            </table> 
+                                 </div>    
+                             </div>                      
+                        </div>                 
+                    </div>
+                </form>   
+                </div>
+            </div>
+             <div class="ibox">
+                <div class="ibox-title">
+                    <h5>Broadcast Question:</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="well">
+                        <p>Question: <i>"{{currentQuestion.title}}"</i></p>                                            
+                        <ol style="list-style:none" ng-show="currentQuestion.type!='free'">
+                            <li ng-repeat="item in currentQuestion.items">
+                                {{item.value}}.  {{item.text}} 
+                            </li>   
+                        </ol>
+                    </div>                   
+                </div>
+            </div>          
+        </div>
+        <div class="col-lg-6 connectPanels" ui-sortable="sortableOptions">
+             <div class="ibox ">
+                <div class="ibox-title">
+                    <div class="col-md-5">
+                            <h5>Participant(s): <font size="4" color="#ed5565">{{ participantCount }}</font></h5>
+                    </div>    
+                    <div class="col-md-3">
+                            <h5>Responded: <font size="4" color="#ed5565">{{ respondedtoquestion.length || 0}}</font></h5>
+                    </div>
+                    <div class="ibox-tools">
+                        <button  ng-click="refreshConnection()" class="btn btn-primary btn-xs pull-right">Refresh</button>
+                    </div>
+                </div>               
+            </div>           
+            <div class="ibox" ng-show="currentQuestion.type!='free'">
+                <div class="ibox-title">
+                    <h5>Live Stats:</h5>
+                </div>
+                                      
+                <div class="ibox-content">
+                    <div class="row" style="margin-top:-14px">
+                    <table class="table table-bordered no-margins">
+                        <thead>
+                            <tr>
+                                <td>Answers</td>
+                                <td>Count</td>
+                                <td></td>
+                            </tr>    
+                        </thead>
+                        <tr ng-repeat="cd in chartData">
+                            <td>{{cd.value}}. {{cd.text}}</td>
+                            <td style="text-align:end">{{cd.count}}</td>
+                            <td style="width:20px;text-align:end">{{ getPercent(cd.count,chart.total)}}</td>
+                        </tr>     
+                    </table>
+                    </div>
+                    </br>    
+                    <div class="row">                        
+                            <canvas class="chart chart-doughnut"
+                                  chart-data="chart.data" chart-labels="chart.labels"
+                                  responsive="true">
+                            </canvas>   
+                    </div>                     
+                </div>
+            </div>            
+            <div class="ibox" ng-show="currentQuestion.type=='free'">
+                <div class="ibox-title">
+                    <h5>Answer List:</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="well">                                                                                            
+                        <ol style="list-style:none;padding:0;">
+                            <li ng-repeat="respond in respondedtoquestion">
+                                <blockquote>
+                                <p>{{respond.answer}}</p>
+                                <small><strong>{{respond.user_id.name}}</strong> <!--in <cite title="" data-original-title="">Book name</cite>--></small>
+                                </blockquote> 
+                            </li>   
+                        </ol>
+                    </div>                   
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

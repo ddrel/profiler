@@ -1,0 +1,58 @@
+          <div class="sidebar-collapse">
+              <ul class="nav" id="side-menu">
+                  <li class="nav-header">
+                      <div class="dropdown profile-element">
+                        <span>
+                          <img alt="image" class="img-circle" src="http://faces.tap.ibm.com/imagesrv/{{ users.ibm.serialNumber}}.jpg" />
+                        </span>
+                          <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                              <!-- <span class="clear"> -->
+                              <span class="block m-t-xs">
+                                  <strong class="font-bold">
+                                    <%= users.name %>
+                                  </strong>
+                              </span>
+                              <span class="text-muted text-xs block">
+                                  <%= users.roles[0] || "--" %>
+                              </span>
+                              <span class="text-muted text-xs block" ng-bind="locationText">
+                              </span>
+                          </a>
+                          <div status-form style="margin-top: 40px;"></div>
+                      </div>
+                      <div class="logo-element">
+                          FCC+
+                      </div>
+                  </li>
+                  <li>
+                      <a ui-sref="dashboard.main">
+                          <i class="fa fa-th-list"></i>
+                          <span class="nav-label">Dashboard</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a>
+                          <i class="fa fa-user"></i>
+                          <span class="nav-label">Profile</span>
+                      </a>
+                  </li>                 
+                  <li ng-show="{{ users.roles.indexOf('ADMIN') > -1}}">
+                      <a ui-sref="home.manage">
+                          <i class="fa fa-list-alt"></i>
+                          <span class="nav-label">User Management</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a ui-sref="dashboard.audit-logs">
+                          <i class="fa fa-list"></i>
+                          <span class="nav-label">Activity Log</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a ui-sref="dashboard.settings">
+                          <i class="fa fa-gear"></i>
+                          <span class="nav-label">Settings</span>
+                      </a>
+                  </li>
+              </ul>
+          </div>

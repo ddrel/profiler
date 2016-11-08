@@ -1,0 +1,81 @@
+<div class="modal-header navy-bg">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title">Add/Update Questionnaire Item</h3>
+</div>
+<div class="modal-content" ng-init="init()">
+    <div class="modal-body">      
+      <div class="row">
+          <div class="col-sm-12">
+              <form role="form">
+                  <div class="form-group">
+                    <label>Event Title:</label>
+                     <h5 style="padding-left:4px"><i>{{ selectedEvent.title }}</i></h5>   
+                  </div>
+                  <div class="form-group">
+                    <label>Question:</label>
+                    <textarea style="resize:vertical" ng-model="currentQuest.title" name="textarea" class="form-control"></textarea>
+                  </div>     
+                  <div class="form-group">
+                        <label class="col-sm-3 control-label">Answer type:</label>                    
+                        <div class="col-sm-8">
+                            <label class="checkbox-inline">
+                                <input id="optionsRadios1" type="radio" ng-model="currentQuest.type" name="optionsRadios" value="single"></input>
+                                Single
+                            </label>
+                            <label class="checkbox-inline">
+                                <input id="optionsRadios2" type="radio" ng-model="currentQuest.type" name="optionsRadios" value="multi"></input>
+                                Multi
+                            </label>
+                            <label class="checkbox-inline">
+                                <input id="optionsRadios3" type="radio" ng-model="currentQuest.type" name="optionsRadios" value="free"></input>
+                                Free Text
+                            </label>    
+                        </div>    
+                  </div>
+                  <div class="form-group">
+                       <table class="table table-bordered" ng-show="currentQuest.type!=='free'">
+                           <tr class="ng-scope" ng-repeat="item in currentQuest.items">
+                            <td class="label-info" style=" padding: 6px 0 0;text-align: center;width: 30px;"><h5>{{item.value}} .</h5></td>
+                            <td style="padding:0px">
+                                <input type="text" required placeholder="" class="form-control" ng-model="item.text"></input>
+                            </td>
+                            <td style="padding:1px;width:30px;">
+                                <button class="btn btn-danger btn-circle btn-outline" ng-click="removeItem(item,$index)" type="button">
+                                    <i class="fa fa-times"></i>
+                                </button>
+                            </td>
+                           </tr>   
+                          <tfoot>
+                              <tr>
+                                  <td style="padding: 3px;" colspan="3">
+                                      <button class="btn btn-primary btn-xs pull-right" ng-click="addItem()">Add Options</button>
+                                  </td>
+                              </tr>
+                          </tfoot>     
+                       </table>
+                       <div class="col-sm-12" style="text-align:center;" ng-if="!initAdd">                           
+                           <pagination ng-change="pageChanged(paginationQuest.CurrentPage)"  total-items="(selectedEvent.questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="5" class="pagination-sm" boundary-links="true"></pagination>
+                       </div>        
+                  </div>                                         
+              </form>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+            <button class="btn btn-white" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-primary" ng-click="save()">Save</button>
+            <button ng-if="initAdd" class="btn btn-primary" ng-click="saveCreate()">Save and Create New</button>                    
+    </div>
+</div>
+
+<!-- iCheck -->
+<script src="/common/js/plugins/iCheck/icheck.min.js"></script>
+<link href="/common/css/plugins/iCheck/custom.css" rel="stylesheet">
+<script>
+    $(document).ready(function(){
+        $('.i-checksEvent').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+</script>

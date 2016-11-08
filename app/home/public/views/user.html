@@ -1,0 +1,43 @@
+<div class="wrapper wrapper-content" ng-controller="usersHomeController" ng-init="init()">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox-title">
+            <div class="col-md-10">
+                <h5>Manage Users</h5>
+            </div>            
+        </div>
+        <div class="ibox-content"> 
+            <div class="input-group">
+                <input type="text" placeholder="Search user" class="form-control" ng-model="search"> 
+                <span class="input-group-btn"> 
+                    <button class="btn btn-primary" type="button">Go!
+                    </button> 
+                </span>
+            </div>          
+            <table class="table table-hover no-margins" data-ng-show="users.length > 0">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th> 
+                    <th>Access Type</th>                   
+                    <th class="text-center pull-right">Action</th>
+                </tr>               
+                </thead>
+                <tbody>
+                <tr style="font-size:12px" class="ng-scope" 
+                    ng-repeat="user in users | filter : search">
+                    <td>{{user.name}}</td>
+                    <td>{{user.email}}</td>
+                    <td>{{user.roles[0]}}</td>                                                            
+                    <td class="text-center">
+                        <a style="margin-left:2px" class="btn btn-danger btn-xs pull-right" 
+                        ng-click="deleteuser(user,$index)"><i class="fa fa-times-circle"></i> Delete </a>
+                        <a class="btn btn-primary btn-xs pull-right" ng-click="updateRoles(user)"><i class="fa fa-pencil"></i> {{user.roles[0]=="ADMIN"?"Remove Admin Access":"Set as Admin"}} </a>                            
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</div>

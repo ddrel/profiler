@@ -1,0 +1,56 @@
+<style>
+.ui-datepicker{z-index:999999999999999 !important;}
+#ui-datepicker-div{z-index:999999999999999 !important;}
+</style>
+<div class="modal-header navy-bg">
+    <button type="button" class="close" ng-click="cancel()">&times;</button>
+    <h3 class="modal-title">Add/Update Events</h3>
+</div>
+<div class="modal-content" ng-init="init()">
+    <div class="modal-body">      
+      <div class="row">
+          <div class="col-sm-12">
+              <form role="form">
+                  <div class="form-group">
+                    <label>Events Title:</label>
+                    <input type="text" placeholder="Events title" class="form-control" ng-model="events.title">
+                  </div>    
+                  <div class="form-group">
+                    <label>Description:</label>
+                     <textarea style="resize:vertical" name="textarea" placeholder="Description" class="form-control" ng-model="events.description"></textarea>
+                     <!--<input type="text" placeholder="Description" class="form-control" ng-model="events.description"> -->
+                  </div>
+                  <div class="form-group">
+                    <label>Event Date:</label>
+                     <div> 
+                      <input readonly id="eventDate" class="single-line" style="width:auto;"></input>
+                    </div>
+                  </div>               
+                  <div class="form-group">
+                    <label>Active:</label>                     
+                    <div>
+                      <input type="checkbox" ng-model="events.active" class="i-checksEvent">
+                      </input>
+                    </div>  
+                  </div>                                     
+              </form>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-white" ng-click="cancel()">Cancel</button>
+        <button class="btn btn-primary" ng-click="save()">Save</button>
+    </div>
+</div>
+
+<!-- iCheck -->
+<script src="/common/js/plugins/iCheck/icheck.min.js"></script>
+<link href="/common/css/plugins/iCheck/custom.css" rel="stylesheet">
+<script>
+    $(document).ready(function(){
+        $('.i-checksEvent').iCheck({
+            checkboxClass: 'icheckbox_square-green',
+            radioClass: 'iradio_square-green',
+        });
+    });
+</script>

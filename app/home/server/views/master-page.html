@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>FCC - Inspiring Woman In Enterprise</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" href="/common/css/style.css"/>
+  <link rel="stylesheet" href="/common/css/animate.css"/>
+
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Mainly scripts -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>    
+    <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
+    
+    
+    <!-- Toastr -->
+    <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+       toastr.options = {
+           'closeButton': true,
+           'progressBar': true,
+           'timeOut': '0',
+           'extendedTimeOut': '500',
+           'showEasing': 'swing',
+           'hideEasing': 'linear',
+           'showMethod': 'fadeIn',
+           'hideMethod': 'fadeOut',
+           'timeOut' : '3000'
+       };
+    </script>
+
+    <!-- Angular -->
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-router-styles/ui-router-styles.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+    <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    
+     <!-- socket -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>  
+    <script>
+        //io.connect({transports: ['websocket']})      
+    </script>   
+   
+    {% if users.roles.indexOf("ADMIN") >-1  %}
+    <script>
+        //var admin_socket = io.connect('/admin');    
+    </script>
+    {% elif users.roles.indexOf("GUEST") %}
+    <script>
+        //admin_socket = {};
+        //var participant_socket = io.connect('/participant');  
+        // var public_socket =  io.connect('/public');  
+    </script>
+    {% else %}
+    <script>
+        //var public_socket =  io.connect('/public');
+    </script>    
+    {% endif %}
+
+    <script>       
+        var FCC = angular.module('FCC', ['ui.router','ngSanitize','ui.bootstrap','ui.sortable','chart.js']);
+        FCC.factory('fcc_socket', ['$rootScope', function($rootScope) {
+            var socket = io.connect("http://<%=  ipaddress %>");
+            return {
+                on: function(eventName, callback){
+                    socket.on(eventName, callback);
+                },
+                emit: function(eventName, data) {
+                    socket.emit(eventName, data);
+                }
+            };
+            }]);
+    </script>
+
+
+    <!-- Angular factory --> 
+    <script src="/common/utils/utils.js"></script>
+
+    <!-- Angular routes -->
+    <script src="/home/routes/fcc.js"></script>
+    <!-- Angular controller -->
+    <script src="/common/controllers/dialog.js"></script>
+    <script src="/home/controllers/home.js"></script>
+    <script src="/home/controllers/main.js"></script>
+    <script src="/home/controllers/guest.js"></script>
+    <script src="/home/controllers/manage.js"></script>
+    <script src="/home/controllers/survey.js"></script>
+    <script src="/home/controllers/user.js"></script>
+    <script src="/events/controllers/events.js"></script>
+    <script src="/events/controllers/eventsDialogController.js"></script>
+    <script src="/questionnaire/controllers/questionDialogcontroller.js"></script>
+    <script src="/questionnaire/controllers/questionnaire.js"></script>
+        
+
+    <!-- Angular service -->    
+    <script src="/common/service/dialog.js"></script>
+
+    <!-- Custom and plugin javascript -->
+    <script src="/common/js/inspinia.js"></script>    
+    <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/common/js/plugins/pace/pace.min.js"></script>
+    <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/common/js/plugins/ui-sortable/sortable.js"></script>
+</head>
+<body ng-app = "FCC">    
+      <div id='wrapper' ng-controller="MainTemplateController">
+        <div class="sidebar-collapse">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+              <ul class="nav" id="side-menu">
+                  <li class="nav-header">
+                      <div class="dropdown profile-element">
+                        <span>
+                          <img alt="image" class="img-circle" style="width:100%" src="/common/images/femalecorporate.jpg" />
+                        </span>
+                          <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                              <!-- <span class="clear"> -->
+                              <span class="block m-t-xs">
+                                  <strong class="font-bold">
+                                    <%= users.name %>
+                                  </strong>
+                              </span>
+                              <span class="text-muted text-xs block">
+                                  <%= users.roles[0] || "--" %>
+                              </span>                              
+                          </a>
+                      </div>
+                      <div class="logo-element" style="background-color:#7f008a">
+                          FCC+
+                      </div>
+                  </li>                              
+                  <li>
+                      <a ui-sref="home.main">
+                          <i class="fa fa-th-list"></i>
+                          <span class="nav-label">Dashboard</span>
+                      </a>
+                  </li>
+                  {% if users.roles.indexOf("ADMIN") >-1  %}                        
+                  <li>
+                      <a ui-sref="home.events">
+                          <i class="fa fa-suitcase"></i>
+                          <span class="nav-label">Events</span>
+                      </a>
+                  </li>                                  
+                  <li>
+                      <a ui-sref="home.manage">
+                          <i class="fa fa-sitemap"></i>
+                          <span class="nav-label">Manage Questions</span>
+                      </a>
+                  </li>
+                  <li>
+                      <a ui-sref="home.users">
+                          <i class="fa fa-users"></i>
+                          <span class="nav-label">Manage Users</span>
+                      </a>
+                  </li>
+                 {% endif%} 
+                  <li>
+                      <a ui-sref="home.question">
+                          <i class="fa fa-question"></i>
+                          <span class="nav-label">Questionnaire</span>
+                      </a>
+                  </li>
+                   {% if users.roles.indexOf("ADMIN") >-1  %}
+                   <li>
+                      <a  target="_blank" href="/chart">
+                          <i class="fa fa-pie-chart"></i>
+                          <span class="nav-label">Live Chart</span>
+                      </a>
+                  </li>
+                   {% endif%} 
+                   
+                  <!--
+                  <li>
+                      <a>
+                          <i class="fa fa-list"></i>
+                          <span class="nav-label">About/Comment</span>
+                      </a>
+                  </li>
+                  -->
+              </ul>
+         </nav>     
+        </div>
+      <div id="page-wrapper" class="gray-bg dashbard-1">
+      <div class="row border-bottom">
+      <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+      <div class="navbar-header">
+          <a class="navbar-minimalize minimalize-styl-2 btn btn-primary "><i class="fa fa-bars"></i> </a>
+      </div>
+          <ul class="nav navbar-top-links navbar-right">
+              <li>
+                  <span class="m-r-sm text-muted welcome-message">Welcome to Filipina CEO Circle </span>
+              </li>
+              <li>
+                  <a href="/logout">
+                      <i class="fa fa-sign-out"></i> Log out
+                  </a>
+              </li>
+          </ul>
+      </nav>
+      </div>
+      <div class="row" ui-view>
+                {% block content %}{% endblock %}
+      </div>
+      <div class="footer fixed">
+          <div class="pull-right">
+              <strong>Filipina CEO Circle</strong>
+          </div>
+          <div>
+              <strong>Copyright</strong> IBM FCC&copy; 2016
+          </div>
+      </div>
+    </div>
+</div> 
+</body>
+
+<script>
+ const __user__  =  {};
+                __user__.isAdmin =  ("<%= users.roles.indexOf('ADMIN')>-1 %>"=="true");
+                __user__.roles =  "<%= users.roles[0] %>";
+                __user__.id =  "<%= users._id.toString() %>";
+
+</script>
+</html>
