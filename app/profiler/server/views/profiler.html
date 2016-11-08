@@ -97,7 +97,7 @@
                         <h3><div class="btn  dim" ng-class="{'btn-primary':answerCollection[question._id],'btn-warning':!answerCollection[question._id]}" id="{{question._id}}" ng-show="answerCollection[question._id]">
                                 <i class="fa " ng-class="{'fa-check':answerCollection[question._id],'fa-warning':!answerCollection[question._id]}"></i>
                             </div>
-                             &nbsp;{{question.title}}
+                                {{($index + 1)}}.)  &nbsp;{{question.title}}
                             </h3>
                         <ul class="list-group">
                             <li class="list-group-item" ng-repeat="item in question.items">                                
