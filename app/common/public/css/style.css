@@ -811,3 +811,22 @@ fieldset[disabled] .btn-primary.active {
 .questionables {
   padding-left: 75px;
 }
+
+.qitems {
+  margin-top:10px;
+}
+.navbar-header {
+    display: inline;
+    float: left;
+}
+@media (max-width: 768px) {
+    .top-navigation .navbar-header {
+        display: block;
+        float: none;
+    }
+}
+@media (min-width: 768px) {
+  .navbar-header {
+    float: left;
+  }
+}
