@@ -174,10 +174,48 @@
           </div>
 
           <div class="row">
-              <div class="col-lg-12 text-center">
-
-
+            <div class="col-md-12">
+            <table class="table table-bordered table-hover no-margins"> 
+                <thead>
+                    <tr>
+                        <td colspan="2">
+                             <h1><font color="#ff6666">Thank you for your participation!</font></h1>    
+                         </td>   
+                    </tr> 
+                </thead>         
+                <tbody>
+                <tr>
+                    <td>Name:</td>
+                    <td>{{ user.intranet_name }}</td>                
+                </tr>
+                <tr>
+                    <td>Email:</td>
+                    <td>{{ user.email }}</td>                
+                </tr>
+                <tr>
+                    <td>JRSS:</td>
+                    <td>{{ user.jrss }}</td>                
+                </tr>
+                </tbody>
+            </table> 
+        </div>                           
               </div>
+
+<div class="row">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover no-margins table-striped">        
+                    <tbody>
+                    <tr ng-repeat="question in questionnaire">
+                        <td>
+                            <div><h4> {{($index + 1)}}.) {{question.title}}</h4></div>
+                            <div><font color="#006699">&nbsp;&nbsp;&nbsp;{{getanswer(question._id)}}</font></div>
+                        </td>                                        
+                    </tr>                
+                    </tbody>                
+            </table> 
+        </div>
+</div> 
+
           </div>
           <div class="row">
               <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">

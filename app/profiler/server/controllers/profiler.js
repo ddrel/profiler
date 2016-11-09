@@ -4,8 +4,13 @@ const ObjectId  = mongoose.Types.ObjectId;
 
 
 exports.getsurvey =  function(req,res){
+
+    if(!req.user) return res.status(500).json({"error":"authentication required"});
+
     const event = mongoose.model('event'); 
-    var user = req.user;
+    const user = req.user;
+
+
     event.findOne({title:user.jrss}).exec(function(err,doc){
          if(!err && doc){
              var _user = {};
@@ -18,6 +23,49 @@ exports.getsurvey =  function(req,res){
             return res.status(500).json(err);
         } 
     });
+}
+
+
+
+exports.getprofileranswer =  function(req,res){
+    if(!req.user) return res.status(500).json({"error":"authentication required"});
+
+    const user = req.user;
+    const answer = mongoose.model('answer');     
+    const event = mongoose.model('event'); 
+
+    event.findOne({title:user.jrss}).exec(function(err,doc){
+         if(!err && doc){
+                answer.find({user_id:user._id}).exec(function(err,docAnswer){
+                    if(!err && doc){
+                        var _user = {};
+                            _user.email= user.email;
+                            _user.jrss= user.jrss;
+                            _user.name= user.name;
+                            _user.intranet_name= user.intranet_name;        
+
+                            var _qarray = [];
+                                doc.questionnaire.forEach(function(d){
+                                 _qarray.push({_id:d._id,
+                                              title:d.title});
+
+                                })
+                                //doc.questionnaire
+                                
+
+                                
+                            return res.status(200).json({user:_user, title:doc.title,description:doc.description,questionnaire:_qarray,answer:docAnswer});
+                    }else {
+                        return res.status(500).json(err);
+                    } 
+                });            
+         }else {
+            return res.status(500).json(err);
+        } 
+    });
+
+
+    
 }
 
 
