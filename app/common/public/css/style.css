@@ -819,6 +819,9 @@ fieldset[disabled] .btn-primary.active {
     display: inline;
     float: left;
 }
+.done {
+  padding-left: 100px;
+}
 @media (max-width: 768px) {
     .top-navigation .navbar-header {
         display: block;
