@@ -7,42 +7,9 @@
 */
 /* GLOBAL STYLES
 -------------------------------------------------- */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-    font-weight: 100;
-}
-h1 {
-    font-size: 30px;
-}
-h2 {
-    font-size: 24px;
-}
-h3 {
-    font-size: 16px;
-}
-h4 {
-    font-size: 14px;
-}
-h5 {
-    font-size: 12px;
-}
-h6 {
-    font-size: 10px;
-}
-h3,
-h4,
-h5 {
-    margin-top: 5px;
-    font-weight: 600;
-}
 body {
   color: #676a6c;
   font-family: 'Open Sans', helvetica, arial, sans-serif;
-
 }
 span.navy {
   color: #1ab394;
@@ -802,34 +769,4 @@ fieldset[disabled] .btn-primary.active {
 }
 .pace-inactive {
   display: none;
-}
-
-.litems{
-  font-size: 12px;
-}
-
-.questionables {
-  padding-left: 75px;
-}
-
-.qitems {
-  margin-top:10px;
-}
-.navbar-header {
-    display: inline;
-    float: left;
-}
-.done {
-  padding-left: 100px;
-}
-@media (max-width: 768px) {
-    .top-navigation .navbar-header {
-        display: block;
-        float: none;
-    }
-}
-@media (min-width: 768px) {
-  .navbar-header {
-    float: left;
-  }
 }

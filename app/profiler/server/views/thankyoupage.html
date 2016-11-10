@@ -1,109 +1,235 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IBM Skills Profiler</title>
-    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Profiler</title>
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
   <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
   <link rel="stylesheet" href="/common/css/style.css"/>
+
+
   <link rel="stylesheet" href="/common/css/animate.css"/>
 
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <!-- Mainly scripts -->
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jQuery UI -->
-    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>    
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
-    
-    
 
-    <!-- Angular -->
-    <script src="/bower_components/angular/angular.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-ui-router-styles/ui-router-styles.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
-    <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
-    <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
-    <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-    
-    
-     <!-- socket -->
-    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>-->  
-  
-    <!-- Custom and plugin javascript -->
-    <script src="/common/js/inspinia.js"></script>    
+
+    <!-- Toastr -->
+    <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+       toastr.options = {
+           'closeButton': true,
+           'progressBar': true,
+           'timeOut': '0',
+           'extendedTimeOut': '500',
+           'showEasing': 'swing',
+           'hideEasing': 'linear',
+           'showMethod': 'fadeIn',
+           'hideMethod': 'fadeOut',
+           'timeOut' : '3000'
+       };
+    </script>
+
+
+  <!-- Angular -->
+  <script src="/bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-router-styles/ui-router-styles.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+  <!-- Toastr -->
+      <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+      <script type="text/javascript">
+      toastr.options = {
+          'closeButton': true,
+          'progressBar': true,
+          'timeOut': '0',
+          'extendedTimeOut': '500',
+          'showEasing': 'swing',
+          'hideEasing': 'linear',
+          'showMethod': 'fadeIn',
+          'hideMethod': 'fadeOut',
+          'timeOut' : '5000'
+      };
+      </script>
+
+   <!-- socket -->
+  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>-->
+
+  <!-- Custom and plugin javascript -->
+  <script src="/common/js/inspinia.js"></script>
+  <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+  <script src="/common/js/plugins/pace/pace.min.js"></script>
+  <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+  <script src="/common/js/plugins/ui-sortable/sortable.js"></script>
+
+  <!-- Custom and plugin javascript -->
+    <script src="/common/js/inspinia.js"></script>
+    <script src="/common/js/jquery-2.1.1.js"></script>
+    <script src="/common/js/pace.min.js"></script>
+    <script src="/common/js/bootstrap.min.js"></script>
+
+    <script src="/common/js/classie.js"></script>
+    <script src="/common/js/cbpAnimatedHeader.js"></script>
+    <script src="/common/js/wow.min.js"></script>
     <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     <script src="/common/js/plugins/pace/pace.min.js"></script>
     <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="/common/js/plugins/ui-sortable/sortable.js"></script>     
-    <!--<script src="/socket.io/socket.io.js"></script>--> 
+    <script src="/common/js/plugins/ui-sortable/sortable.js"></script>
+  <!--<script src="/socket.io/socket.io.js"></script>-->
 
-              
-    <script  src="/profiler/controllers/done.js"></script>
-    <script src="/common/utils/utils.js"></script>
-    <script src="/common/service/dialog.js"></script>
+
+  <script  src="/profiler/controllers/profiler.js"></script>
+  <script  src="/profiler/controllers/done.js"></script>
+  <script src="/common/utils/utils.js"></script>
+  <script src="/common/service/dialog.js"></script>
 
 </head>
 <body class="gray-bg" ng-app="FCC" ng-controller="doneController" ng-init="init()">
 <div class="wrapper wrapper-content  animated fadeInRight">
-    <div class="row">
-            <div class="col-md-12">
-            <table class="table table-bordered table-hover no-margins"> 
-                <thead>
-                    <tr>
-                        <td colspan="2">
-                             <h1><font color="#ff6666">Thank you for your participation!</font></h1>    
-                         </td>   
-                    </tr> 
-                </thead>         
-                <tbody>
-                <tr>
-                    <td>Name:</td>
-                    <td>{{ user.intranet_name }}</td>                
-                </tr>
-                <tr>
-                    <td>Email:</td>
-                    <td>{{ user.email }}</td>                
-                </tr>
-                <tr>
-                    <td>JRSS:</td>
-                    <td>{{ user.jrss }}</td>                
-                </tr>
-                </tbody>
-            </table> 
-        </div>                           
-    </div>    
 
-<div class="row">
-        <div class="col-md-12">
-            <table class="table table-bordered table-hover no-margins table-striped">        
-                    <tbody>
-                    <tr ng-repeat="question in questionnaire">
-                        <td>
-                            <div><h4> {{($index + 1)}}.) {{question.title}}</h4></div>
-                            <div><font color="#006699">&nbsp;&nbsp;&nbsp;{{getanswer(question._id)}}</font></div>
-                        </td>                                        
-                    </tr>                
-                    </tbody>                
-            </table> 
+
+
+  <div class="navbar-wrapper">
+            <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header page-scroll">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="#">DONE ASSESSMENT!</a>
+                    </div>
+                     <div id="navbar" class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <!-- <li><a class="page-scroll" href="#page-top">Welcome</a></li>
+                            <li><a class="page-scroll" href="#capability">Capability Development</a></li>
+                            <li><a class="page-scroll" href="#technical">Technical</a></li> -->
+                            <li><a href="/logout" target="_self">Logout</a></li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+    </div>
+    <div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel">
+        <ol class="carousel-indicators">
+
+        </ol>
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <div class="container">
+                  <div class="container">
+                      <div class="carousel-caption blank">
+
+                              <span class="block m-t-xs">
+                                  <strong class="font-bold">
+                                      Hi  <%= users.name %>,
+                                  </strong>
+                              </span>
+                          <h1>Welcome to The Profiler </h1>
+                          <p>Skills Assessment for IBMers</p>
+
+                      </div>
+                  </div>
+
+                </div>
+                <!-- Set background for slide in css -->
+                <div class="header-back two"></div>
+
+            </div>
+
         </div>
-</div> 
 
-</div> 
-<div class="footer fixed" style="margin-left:0px !important">
-          <div class="pull-right">
-              <strong>IBM Skills Profiler</strong>
+    </div>
+
+    <div class="row container done">
+      <div class="col-md-12">
+      <table class="table table-bordered table-hover no-margins">
+          <thead>
+              <tr>
+                  <td colspan="2">
+                       <h1><font color="#ff6666">Thank you for your participation!</font></h1>
+                   </td>
+              </tr>
+          </thead>
+          <tbody>
+          <tr>
+              <td>Name:</td>
+              <td>{{ user.intranet_name }}</td>
+          </tr>
+          <tr>
+              <td>Email:</td>
+              <td>{{ user.email }}</td>
+          </tr>
+          <tr>
+              <td>JRSS:</td>
+              <td>{{ user.jrss }}</td>
+          </tr>
+          </tbody>
+      </table>
+  </div>
+        </div>
+
+  <div class="row container done">
+  <div class="col-md-12">
+      <table class="table table-bordered table-hover no-margins table-striped">
+              <tbody>
+              <tr ng-repeat="question in questionnaire">
+                  <td>
+                      <div><h4> {{($index + 1)}}.) {{question.title}}</h4></div>
+                      <div><font color="#006699">&nbsp;&nbsp;&nbsp;{{getanswer(question._id)}}</font></div>
+                  </td>
+              </tr>
+              </tbody>
+      </table>
+  </div>
+  </div>
+    <p></p>
+  </div>
+  </div>
+
+
+</div>
+
+<section id="contact" class="gray-section contact">
+      <div class="container">
+          <div class="row m-b-lg">
+              <div class="col-lg-12 text-center">
+                  <div class="navy-line"></div>
+
+
+
           </div>
-          <div>
-              <strong>Copyright</strong> IBM Skills Profiler&copy; 2016
+          <div class="row">
+              <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+                  <p><strong>&copy; 2016 IBM</strong><br/> The Profiler</p>
+              </div>
           </div>
       </div>
+  </section>
 </body>
+<script>
+function logout() {
+    window.location.href = '/logouth'
+  }
+</script>
 </html>
-

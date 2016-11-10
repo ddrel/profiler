@@ -590,8 +590,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
     color: #fff;
 }
 .btn-primary {
-    background-color:#7f008a; /*#1ab394*/ 
-    border-color:#7f008a ; /*#1ab394*/
+    background-color:#008080; /*#1ab394*/
+    border-color:#008080 ; /*#1ab394*/
     color: #FFFFFF;
 }
 .btn-primary:hover,
@@ -599,8 +599,8 @@ body.canvas-menu.mini-navbar nav.navbar-static-side {
 .btn-primary:active,
 .btn-primary.active,
 .open .dropdown-toggle.btn-primary {
-    background-color:#7f008a;/*#18a689*/ 
-    border-color: :#7f008a; /*#18a689*/;
+    background-color:#008080;/*#18a689*/
+    border-color: :#008080; /*#18a689*/;
     color: #FFFFFF;
 }
 .btn-primary:active,
