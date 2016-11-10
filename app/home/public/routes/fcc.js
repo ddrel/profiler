@@ -7,6 +7,10 @@
                                   url: '/',
                                   templateUrl: '/home/views/index.html'
                               })
+                              .state('home.faqs', {
+                                  url: 'main',
+                                  templateUrl: '/profiler/views/faqs.html'
+                              })
                               .state('home.main', {
                                   url: 'main',
                                   templateUrl: __user__.isAdmin?'/home/views/main.html':'/home/views/guest.html'
@@ -20,13 +24,13 @@
                                   templateUrl: __user__.isAdmin?'/home/views/user.html':'/home/views/noaccess.html'
                               })
                               .state('home.manage', {
-                                  url: 'manage',                                  
+                                  url: 'manage',
                                   templateUrl:  __user__.isAdmin?'/questionnaire/views/questionnaire.html':'/home/views/noaccess.html'
                               })
                               .state('home.events', {
-                                  url: 'events',                                  
+                                  url: 'events',
                                   templateUrl: __user__.isAdmin?'/home/views/events.html':'/home/views/noaccess.html'
-                              })                             
+                              })
 
          }]).run(function($rootScope, $state, $urlMatcherFactory) {
                 $rootScope.$state = $state;

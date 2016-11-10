@@ -10,18 +10,26 @@ $scope.answerCollection = [];
  $scope.init =  function(){
     $http.get('/ws/profiler/getsurvey').success(function(resp){
            $scope.user = resp.user || {};
-           $scope.questionnaire = resp.questionnaire || {} 
+           $scope.questionnaire = resp.questionnaire || {}
     });
  };
 
 
  $scope.setSingleAnswer =  function(a,b){
      if(!$scope.answerCollection[b._id]){
-            $scope.answerCollection[b._id] = a; 
+            $scope.answerCollection[b._id] = a;
      }else{
          $scope.answerCollection[b._id] = a;
      }
- }     
+ }
+
+ $scope.faqs = function(){
+      window.location = "faqs";
+}
+
+$scope.continue = function(){
+     window.location = "/";
+}
 
 
  $scope.submit =  function(){
@@ -46,18 +54,18 @@ $scope.answerCollection = [];
         }).error(function(err){
             console.log(err);
         })
-                
+
      }
 
      $scope.questionnaire.forEach(function(el) {
-            var a = $scope.answerCollection[el._id]; 
-            var b = a?"btn btn-primary dim":"btn btn-warning  dim";            
+            var a = $scope.answerCollection[el._id];
+            var b = a?"btn btn-primary dim":"btn btn-warning  dim";
             var c = a? "<i class='fa fa-check'></i>":"<i class='fa fa-warning'></i>";
             $("#" + el._id).removeClass();
             $("#" + el._id).addClass(b);
             $("#" + el._id).empty().append(c);
 
-            if(!a){                
+            if(!a){
                 toastr.warning(el.title);
             }
      });
@@ -72,7 +80,7 @@ window.onbeforeunload = function(e){
 
     alert(e);
 var message = "Some of your changes has not yet been saved, Do you want to leave the page?"
-            e = e || window.event;            
+            e = e || window.event;
             if(_isDirty){
                 if( e.hasOwnProperty("preventDefault")){
                     e.preventDefault();
@@ -80,10 +88,10 @@ var message = "Some of your changes has not yet been saved, Do you want to leave
 
                 if (e) {
                     e.returnValue = message;
-                };           
-                   
+                };
+
             }
-            return _isDirty;            
+            return _isDirty;
 };
 
 
