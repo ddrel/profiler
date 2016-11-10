@@ -1,16 +1,33 @@
-var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','ui.sortable','chart.js'])
-.controller("profilerController", function( $scope, $http,utilities,DialogService,$window) {
+var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap'])
+.controller("profilerController", function( $scope, $http,utilities,DialogService,$window,$timeout) {
 
 var _isDirty =  null;
 $scope.user = {}
 $scope.questionnaire = {}
 $scope.answerCollection = [];
 
+$scope.paginationQuest = {};
+$scope.paginationQuest.maxSize= 10; 
+$scope.paginationQuest.CurrentPage=1;
+$scope.page; 
+$scope.progressvalue = 0;
+
+
+ $scope.pageChanged = function(page){
+         $scope.currentQuest = $scope.questionnaire[page -1];
+         //console.log(page);
+     }; 
 
  $scope.init =  function(){
     $http.get('/ws/profiler/getsurvey').success(function(resp){
            $scope.user = resp.user || {};
            $scope.questionnaire = resp.questionnaire || {} 
+           $scope.currentQuest = $scope.questionnaire[0]; 
+    });
+
+    $timeout(function(){               
+        $("#pageloadingbounce").remove();
+        $("#main_app_wrapper").css("visibility","visible");
     });
  };
 
@@ -21,11 +38,39 @@ $scope.answerCollection = [];
      }else{
          $scope.answerCollection[b._id] = a;
      }
+
+     $("#questionnaire_pane").removeClass("fadeInRight");     
+
+     $timeout(function(){
+         var _cp = $scope.paginationQuest.CurrentPage
+         if( _cp<$scope.questionnaire.length){
+                _cp+=1;
+                $scope.currentQuest = $scope.questionnaire[_cp -1];                
+                $scope.paginationQuest.CurrentPage+=1;
+                $("#questionnaire_pane").addClass("fadeInRight");
+
+             
+         }
+         
+         if($scope.questionnaire.length ==$scope.answerCount()){
+             var $target = $('html,body'); 
+            $target.animate({scrollTop: $target.height()}, 1000);
+         }
+
+         $scope.progressvalue = Math.round(($scope.answerCount() / $scope.questionnaire.length) * 100)   
+
+         _isDirty = true;
+
+     },200);
+     
  }     
 
+ $scope.answerCount =  function(){
+     return utilities.ObjSize($scope.answerCollection);
+ }
 
  $scope.submit =  function(){
-     var _answerSize = utilities.ObjSize($scope.answerCollection);
+     var _answerSize = $scope.answerCount();
     if(($scope.questionnaire.length != _answerSize)  && _answerSize>0){
          _isDirty = true;
          toastr.error("List question should not be blanked!");
@@ -69,8 +114,6 @@ $scope.answerCollection = [];
  }
 
 window.onbeforeunload = function(e){
-
-    alert(e);
 var message = "Some of your changes has not yet been saved, Do you want to leave the page?"
             e = e || window.event;            
             if(_isDirty){

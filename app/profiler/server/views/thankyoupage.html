@@ -12,44 +12,20 @@
 
 
   <link rel="stylesheet" href="/common/css/animate.css"/>
-
-  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
     <!-- Mainly scripts -->
     <script src="/bower_components/jquery/dist/jquery.min.js"></script>
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jQuery UI -->
     <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
-    <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
-
-
-    <!-- Toastr -->
-    <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
-    <script type="text/javascript">
-       toastr.options = {
-           'closeButton': true,
-           'progressBar': true,
-           'timeOut': '0',
-           'extendedTimeOut': '500',
-           'showEasing': 'swing',
-           'hideEasing': 'linear',
-           'showMethod': 'fadeIn',
-           'hideMethod': 'fadeOut',
-           'timeOut' : '3000'
-       };
-    </script>
 
 
   <!-- Angular -->
   <script src="/bower_components/angular/angular.min.js"></script>
-  <script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
   <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
-  <script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-  <script type="text/javascript" src="/bower_components/angular-ui-router-styles/ui-router-styles.js"></script>
   <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
   <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
   <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-  <script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
   <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
 
   <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
@@ -69,33 +45,6 @@
       };
       </script>
 
-   <!-- socket -->
-  <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>-->
-
-  <!-- Custom and plugin javascript -->
-  <script src="/common/js/inspinia.js"></script>
-  <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-  <script src="/common/js/plugins/pace/pace.min.js"></script>
-  <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-  <script src="/common/js/plugins/ui-sortable/sortable.js"></script>
-
-  <!-- Custom and plugin javascript -->
-    <script src="/common/js/inspinia.js"></script>
-    <script src="/common/js/jquery-2.1.1.js"></script>
-    <script src="/common/js/pace.min.js"></script>
-    <script src="/common/js/bootstrap.min.js"></script>
-
-    <script src="/common/js/classie.js"></script>
-    <script src="/common/js/cbpAnimatedHeader.js"></script>
-    <script src="/common/js/wow.min.js"></script>
-    <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="/common/js/plugins/pace/pace.min.js"></script>
-    <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-    <script src="/common/js/plugins/ui-sortable/sortable.js"></script>
-  <!--<script src="/socket.io/socket.io.js"></script>-->
-
-
-  <script  src="/profiler/controllers/profiler.js"></script>
   <script  src="/profiler/controllers/done.js"></script>
   <script src="/common/utils/utils.js"></script>
   <script src="/common/service/dialog.js"></script>
@@ -115,8 +64,7 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
-                        </button>
-                        <a class="navbar-brand" href="#">DONE ASSESSMENT!</a>
+                        </button>                        
                     </div>
                      <div id="navbar" class="navbar-collapse collapse">
                         <ul class="nav navbar-nav navbar-right">
@@ -130,38 +78,9 @@
                 </div>
             </nav>
     </div>
-    <div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel">
-        <ol class="carousel-indicators">
+   
 
-        </ol>
-        <div class="carousel-inner" role="listbox">
-            <div class="item active">
-                <div class="container">
-                  <div class="container">
-                      <div class="carousel-caption blank">
-
-                              <span class="block m-t-xs">
-                                  <strong class="font-bold">
-                                      Hi  <%= users.name %>,
-                                  </strong>
-                              </span>
-                          <h1>Welcome to The Profiler </h1>
-                          <p>Skills Assessment for IBMers</p>
-
-                      </div>
-                  </div>
-
-                </div>
-                <!-- Set background for slide in css -->
-                <div class="header-back two"></div>
-
-            </div>
-
-        </div>
-
-    </div>
-
-    <div class="row container done">
+    <div class="row  done">
       <div class="col-md-12">
       <table class="table table-bordered table-hover no-margins">
           <thead>
@@ -189,7 +108,7 @@
   </div>
         </div>
 
-  <div class="row container done">
+  <div class="row  done">
   <div class="col-md-12">
       <table class="table table-bordered table-hover no-margins table-striped">
               <tbody>
@@ -227,9 +146,4 @@
       </div>
   </section>
 </body>
-<script>
-function logout() {
-    window.location.href = '/logouth'
-  }
-</script>
 </html>

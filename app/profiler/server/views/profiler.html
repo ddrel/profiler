@@ -4,42 +4,65 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Profiler</title>
-    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
-    <link rel="stylesheet" href="/common/css/style.css"/>
+     <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+     <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+     <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+     <!--<link rel="stylesheet" href="/common/css/style.css"/> -->
+      <link rel="stylesheet" href="/common/css/style-profiler.css"/>
+      <link rel="stylesheet" href="/common/css/animate.css"/>
 
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- Mainly scripts -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-    <link rel="stylesheet" href="/common/css/animate.css"/>
-
-    <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
-
-
-    <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>    
+    <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
+    
+    
     <!-- Toastr -->
-        <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
-        <script type="text/javascript">
-        toastr.options = {
-            'closeButton': true,
-            'progressBar': true,
-            'timeOut': '0',
-            'extendedTimeOut': '500',
-            'showEasing': 'swing',
-            'hideEasing': 'linear',
-            'showMethod': 'fadeIn',
-            'hideMethod': 'fadeOut',
-            'timeOut' : '5000'
-        };
-        </script>
+    <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+    <script type="text/javascript">
+       toastr.options = {
+           'closeButton': true,
+           'progressBar': true,
+           'timeOut': '0',
+           'extendedTimeOut': '500',
+           'showEasing': 'swing',
+           'hideEasing': 'linear',
+           'showMethod': 'fadeIn',
+           'hideMethod': 'fadeOut',
+           'timeOut' : '3000'
+       };
+    </script>
 
-     <!-- socket -->
+    <!-- Angular -->
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+    <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+    <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+  
+
+<script  src="/profiler/controllers/profiler.js"></script>
+<script src="/common/utils/utils.js"></script>
+<script src="/common/service/dialog.js"></script>
 
 
 </head>
 <body class="gray-bg" ng-app="FCC" ng-controller="profilerController" ng-init="init()">
-<div class="wrapper wrapper-content  animated fadeInRight">
 
+<div class="spiner-example" style="margin:20% auto;" id="pageloadingbounce" >
+        <div class="sk-spinner sk-spinner-three-bounce">
+            <div class="sk-bounce1"></div>
+            <div class="sk-bounce2"></div>
+            <div class="sk-bounce3"></div>
+        </div>
+    </div>
+
+<div class="wrapper wrapper-content animated fadeInRight" id="main_app_wrapper" style="visibility:hidden;">
   <div class="navbar-wrapper">
             <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
                 <div class="container">
@@ -64,10 +87,7 @@
                 </div>
             </nav>
     </div>
-    <div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel">
-        <ol class="carousel-indicators">
-
-        </ol>
+    <div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel">        
         <div class="carousel-inner" role="listbox">
             <div class="item active">
                 <div class="container">
@@ -81,7 +101,7 @@
                               </span>
                           <h1>Welcome to The Profiler </h1>
                           <p>Skills Assessment for IBMers</p>
-                          <p><a class="btn btn-lg btn-primary" href="#" role="button">Learn more</a></p>
+                          <p><a class="btn btn-lg btn-primary" href="#" role="button">FAQ</a></p>
                       </div>
                   </div>
 
@@ -93,42 +113,63 @@
 
         </div>
 
-    </div>
-    <br>
-    <br>
-
-    <section>
-
-      <div class="row container questionables">
-              <div class="col-md-12">
-              <table class="table ">
+    </div>    
+    <section>  
+      <div style="margin:2px auto;" class="row container questionables">
+          <div class="ibox float-e-margins">  
+                    <div class="col-md-8">
+                        <div style="margin-top: 26px;">
+                            <progressbar ng-hide="progressvalue==0" type="success" value="progressvalue" >
+                                    <span ng-show="progressvalue>20"> Completed: {{progressvalue}}%</span>
+                                    <span ng-show="progressvalue<=20">{{progressvalue}}%</span>                                
+                            </progressbar>
+                        </div>                        
+                    </div>
+                    <div class="col-md-4">
+                    <div class="pull-right">
+                        <h2><font color="#ff6666">Questionnaire {{paginationQuest.CurrentPage}} of {{questionnaire.length}}</font></h2>
+                    </div>
+                    </div>                   
+                                    
+                <div class="ibox-content animated" id="questionnaire_pane">
+                    <table  class="table ">
                       <tbody >
-                      <tr ng-repeat="question in questionnaire">
-                          <td class="qitems">
-                              <h3><div class="btn  dim" ng-class="{'btn-primary':answerCollection[question._id],'btn-warning':!answerCollection[question._id]}" id="{{question._id}}" ng-show="answerCollection[question._id]">
-                                      <i class="fa " ng-class="{'fa-check':answerCollection[question._id],'fa-warning':!answerCollection[question._id]}"></i>
+                      <tr>
+                          <td class="qitems" style="border-top:none;">
+                              <h3>
+                                  <!--<div class="btn  dim" ng-class="{'btn-primary':answerCollection[currentQuest._id],'btn-warning':!answerCollection[currentQuest._id]}" id="{{currentQuest._id}}" ng-show="answerCollection[currentQuest._id]">
+                                      <i class="fa " ng-class="{'fa-check':answerCollection[currentQuest._id],'fa-warning':!answerCollection[currentQuest._id]}"></i>
                                   </div>
-                                {{($index + 1)}}.)  &nbsp;{{question.title}}
+                                  -->
+                                {{paginationQuest.CurrentPage}}.)  &nbsp;{{currentQuest.title}}
                                  </h3>
                               <ul class="list-group">
-                                  <li class="list-group-item litems" ng-repeat="item in question.items">
-                                      <input  type="radio" class="i-question iradio_square-green" name="group_question_{{question._id}}" ng-model="selectedAnswer" ng-click="setSingleAnswer(item,question)" value="item.value"></input>  {{item.value}}.   {{item.text}}
+                                  <li class="list-group-item litems" ng-repeat="item in currentQuest.items">
+                                      <input  type="radio" class="i-question iradio_square-green" name="group_question_{{currentQuest._id}}"  ng-checked="answerCollection[currentQuest._id].value==item.value" ng-click="setSingleAnswer(item,currentQuest)" value="item.value"></input>  {{item.value}}.   {{item.text}}
                                       <!--<span class="tag tag-default tag-pill float-xs-right">14</span>Cras justo odio -->
                                   </li>
-                              </ul>
+                              </ul>                            
                           </td>
                       </tr>
-                      </tbody>
-                      <tfoot>
-                          <tr>
-                              <td>
-
-                               </td>
-                          </tr>
-                      </tfoot>
-              </table>
-
-              </div>
+                      </tbody>                      
+                </table>
+                    <div class="row-sm-12  text-center" ng-show="questionnaire.length==answerCount()">                           
+                           <pagination first-text="&nbsp;" last-text="&nbsp;" ng-change="pageChanged(paginationQuest.CurrentPage)" rotate="false" boundary-link-numbers="false" total-items="(questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="10" class="pagination-sm" boundary-links="true">                               
+                           </pagination>                             
+                    </div>
+                    <div class="row-sm-12" ng-show="questionnaire.length==answerCount()">
+                                <div class="col-sm-12 text-center">
+                                    <div class="navy-line"></div>
+                                    <h1>End of Assessment</h1>
+                                    <p>Please review all the questionnaires and answers before clicking submit</p>
+                                    <div class="row">
+                                    <button class="btn btn-primary" ng-click="submit();" type="button">Submit</button>
+                                    </div>
+                                </div>
+                            </div>
+                </div>                    
+                </div>
+            </div>             
           </div>
   </section>
 
@@ -136,6 +177,7 @@
 
 <section id="contact" class="gray-section contact">
       <div class="container">
+          <!--
           <div class="row m-b-lg">
               <div class="col-lg-12 text-center">
                   <div class="navy-line"></div>
@@ -146,7 +188,7 @@
                 </div>
               </div>
           </div>
-
+            -->
           <div class="row">
               <div class="col-lg-12 text-center">
 
@@ -159,72 +201,18 @@
               </div>
           </div>
       </div>
+
+    
   </section>
 
+
+
+
+
 </body>
-<!-- Mainly scripts -->
-<script src="/bower_components/jquery/dist/jquery.min.js"></script>
-<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
-<!-- jQuery UI -->
-<script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
-<script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
-
-
-<!-- Toastr -->
-<script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
-<script type="text/javascript">
-   toastr.options = {
-       'closeButton': true,
-       'progressBar': true,
-       'timeOut': '0',
-       'extendedTimeOut': '500',
-       'showEasing': 'swing',
-       'hideEasing': 'linear',
-       'showMethod': 'fadeIn',
-       'hideMethod': 'fadeOut',
-       'timeOut' : '3000'
-   };
-</script>
-
-
-<!-- Angular -->
-<script src="/bower_components/angular/angular.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular-mocks/angular-mocks.js"></script>
-<script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular-ui-router/release/angular-ui-router.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular-ui-router-styles/ui-router-styles.js"></script>
-<script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
-<script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
-<script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
-<script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
-<script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.8/socket.io.js"></script>-->
-
-<!-- Custom and plugin javascript -->
-<script src="/common/js/inspinia.js"></script>
-<script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-<script src="/common/js/plugins/pace/pace.min.js"></script>
-<script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-<script src="/common/js/plugins/ui-sortable/sortable.js"></script>
-
-<!-- Custom and plugin javascript -->
-  <script src="/common/js/inspinia.js"></script>
-  <script src="/common/js/jquery-2.1.1.js"></script>
-  <script src="/common/js/pace.min.js"></script>
-  <script src="/common/js/bootstrap.min.js"></script>
-
-  <script src="/common/js/classie.js"></script>
-  <script src="/common/js/cbpAnimatedHeader.js"></script>
-  <script src="/common/js/wow.min.js"></script>
-  <script src="/common/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-  <script src="/common/js/plugins/pace/pace.min.js"></script>
-  <script src="/common/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
-  <script src="/common/js/plugins/ui-sortable/sortable.js"></script>
-<!--<script src="/socket.io/socket.io.js"></script>-->
-
-
-<script  src="/profiler/controllers/profiler.js"></script>
-<script src="/common/utils/utils.js"></script>
-<script src="/common/service/dialog.js"></script>
+    
+<script src="/common/js/classie.js"></script>
+<script src="/common/js/cbpAnimatedHeader.js"></script>
+<script src="/common/js/wow.min.js"></script>
 </html>
