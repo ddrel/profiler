@@ -11,6 +11,7 @@ $scope.paginationQuest.maxSize= 10;
 $scope.paginationQuest.CurrentPage=1;
 $scope.page; 
 $scope.progressvalue = 0;
+$scope.savingstatustext = "Submit";
 
 
  $scope.pageChanged = function(page){
@@ -22,7 +23,24 @@ $scope.progressvalue = 0;
     $http.get('/ws/profiler/getsurvey').success(function(resp){
            $scope.user = resp.user || {};
            $scope.questionnaire = resp.questionnaire || {} 
-           $scope.currentQuest = $scope.questionnaire[0]; 
+           
+           var _answer = utilities.cache.getDataAnswer($scope.user.email);                     
+           var ansCount = utilities.ObjSize(_answer);
+           if(ansCount>0){
+               console.log(_answer);               
+               $scope.currentQuest = $scope.questionnaire[ansCount];               
+               $scope.answerCollection = _answer;
+               $scope.paginationQuest.CurrentPage = ansCount + 1;
+               $scope.progressvalue = Math.round((ansCount / $scope.questionnaire.length) * 100);
+
+           }else{
+               utilities.cache.removeDataAnswer($scope.user.email);
+               $scope.currentQuest = $scope.questionnaire[0];
+           }
+           
+           
+
+
     });
 
     $timeout(function(){               
@@ -39,6 +57,11 @@ $scope.progressvalue = 0;
          $scope.answerCollection[b._id] = a;
      }
 
+
+    
+
+     utilities.cache.setDataAnswer($scope.user.email,$scope.answerCollection);
+     //console.log(utilities.cache.getDataAnswer($scope.user.email));
      $("#questionnaire_pane").removeClass("fadeInRight");     
 
      $timeout(function(){
@@ -57,11 +80,11 @@ $scope.progressvalue = 0;
             $target.animate({scrollTop: $target.height()}, 1000);
          }
 
-         $scope.progressvalue = Math.round(($scope.answerCount() / $scope.questionnaire.length) * 100)   
+         $scope.progressvalue = Math.round(($scope.answerCount() / $scope.questionnaire.length) * 100);   
 
          _isDirty = true;
 
-     },200);
+     },100);
      
  }     
 
@@ -76,6 +99,7 @@ $scope.progressvalue = 0;
          toastr.error("List question should not be blanked!");
      }else if(($scope.questionnaire.length == _answerSize)  && _answerSize>0){
             _isDirty=null;
+
             var _transport = [];
                 for(var key in $scope.answerCollection){
                         var _data = {}
@@ -86,9 +110,14 @@ $scope.progressvalue = 0;
                             _data.answer.default = $scope.answerCollection[key].default;
                             _transport.push(_data);
                 };
+
+        $scope.savingstatustext = "Saving ..."        
         $http.post('/ws/profiler/save',{data:_transport}).success(function(resp){
-            window.location.href=window.location.href;
+            //window.location.href=window.location.href;
+            utilities.cache.removeDataAnswer($scope.user.email)
+            window.location.reload();
         }).error(function(err){
+            $scope.savingstatustext = "Error, Submit Again"
             console.log(err);
         })
                 
