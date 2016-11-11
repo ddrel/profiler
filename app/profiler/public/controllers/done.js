@@ -1,4 +1,4 @@
-var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','ui.sortable'])
+var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap'])
 .controller("doneController", function( $scope, $http,$rootScope,utilities,DialogService,$window) {
 
     $scope.user = {};
@@ -10,8 +10,6 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','ui.sortable'])
         $scope.user = resp.user || {};
         $scope.questionnaire = resp.questionnaire || {}
         $scope.answer = resp.answer || [] 
-
-        console.log(resp);
 	    });
     };
 
