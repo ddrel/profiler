@@ -17,10 +17,10 @@
     <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 
     <!-- jQuery UI -->
-    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>    
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
     <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
-    
-    
+
+
     <!-- Toastr -->
     <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
     <script type="text/javascript">
@@ -44,7 +44,7 @@
     <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
     <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
-  
+
 
 <script  src="/profiler/controllers/profiler.js"></script>
 <script src="/common/utils/utils.js"></script>
@@ -87,7 +87,7 @@
                 </div>
             </nav>
     </div>
-    <div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel">        
+    <div id="inSlider" class="carousel slide carousel-fade" data-ride="carousel">
         <div class="carousel-inner" role="listbox">
             <div class="item active">
                 <div class="container">
@@ -113,24 +113,24 @@
 
         </div>
 
-    </div>    
-    <section>  
+    </div>
+    <section>
       <div style="margin:2px auto;" class="row container questionables">
-          <div class="ibox float-e-margins">  
+          <div class="ibox float-e-margins">
                     <div class="col-md-8">
                         <div style="margin-top: 26px;">
                             <progressbar ng-hide="progressvalue==0" type="success" value="progressvalue" >
                                     <span ng-show="progressvalue>20"> Completed: {{progressvalue}}%</span>
-                                    <span ng-show="progressvalue<=20">{{progressvalue}}%</span>                                
+                                    <span ng-show="progressvalue<=20">{{progressvalue}}%</span>
                             </progressbar>
-                        </div>                        
+                        </div>
                     </div>
                     <div class="col-md-4">
                     <div class="pull-right">
                         <h2><font color="#ff6666">Questionnaire {{paginationQuest.CurrentPage}} of {{questionnaire.length}}</font></h2>
                     </div>
-                    </div>                   
-                                    
+                    </div>
+
                 <div class="ibox-content animated" id="questionnaire_pane">
                     <table  class="table ">
                       <tbody >
@@ -148,14 +148,14 @@
                                       <input  type="radio" class="i-question iradio_square-green" name="group_question_{{currentQuest._id}}"  ng-checked="answerCollection[currentQuest._id].value==item.value" ng-click="setSingleAnswer(item,currentQuest)" value="item.value"></input>  {{item.value}}.   {{item.text}}
                                       <!--<span class="tag tag-default tag-pill float-xs-right">14</span>Cras justo odio -->
                                   </li>
-                              </ul>                            
+                              </ul>
                           </td>
                       </tr>
-                      </tbody>                      
+                      </tbody>
                 </table>
-                    <div class="row-sm-12  text-center" ng-show="questionnaire.length==answerCount()">                           
-                           <pagination first-text="&nbsp;" last-text="&nbsp;" ng-change="pageChanged(paginationQuest.CurrentPage)" rotate="false" boundary-link-numbers="false" total-items="(questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="10" class="pagination-sm" boundary-links="true">                               
-                           </pagination>                             
+                    <div class="row-sm-12  text-center">                           
+                           <pagination first-text="&nbsp;" last-text="&nbsp;" ng-change="pageChanged(paginationQuest.CurrentPage)" rotate="false" boundary-link-numbers="false" total-items="(questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="10" class="pagination-sm" boundary-links="true">
+                           </pagination>
                     </div>
                     <div class="row-sm-12" ng-show="questionnaire.length==answerCount()">
                                 <div class="col-sm-12 text-center">
@@ -167,9 +167,9 @@
                                     </div>
                                 </div>
                             </div>
-                </div>                    
                 </div>
-            </div>             
+                </div>
+            </div>
           </div>
   </section>
 
@@ -202,7 +202,7 @@
           </div>
       </div>
 
-    
+
   </section>
 
 
@@ -211,7 +211,7 @@
 
 </body>
 
-    
+
 <script src="/common/js/classie.js"></script>
 <script src="/common/js/cbpAnimatedHeader.js"></script>
 <script src="/common/js/wow.min.js"></script>
