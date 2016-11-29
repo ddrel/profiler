@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Profiler</title>
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" href="/common/css/style-fcc.css"/>
+   <link rel="stylesheet" href="/profiler/css/sme.css"/>
+
+
+  <link rel="stylesheet" href="/common/css/animate.css"/>
+    <!-- Mainly scripts -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
+
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
+
+
+  <!-- Angular -->
+  <script src="/bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
+
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+  <!-- Toastr -->
+      <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+      <script type="text/javascript">
+      toastr.options = {
+          'closeButton': true,
+          'progressBar': true,
+          'timeOut': '0',
+          'extendedTimeOut': '500',
+          'showEasing': 'swing',
+          'hideEasing': 'linear',
+          'showMethod': 'fadeIn',
+          'hideMethod': 'fadeOut',
+          'timeOut' : '5000'
+      };
+      </script>
+
+  <script  src="/profiler/controllers/lnk.js"></script>
+  <script src="/common/utils/utils.js"></script>
+  <script src="/common/service/dialog.js"></script>
+
+</head>
+<body class="gray-bg" ng-app="FCC" ng-controller="lnkController" ng-init="init()">
+<div class="wrapper  animated fadeInRight">
+    <div  class="row">
+        <div class="col-lg-12">
+            <div class="ibox-title">
+                <div class="col-md-10">
+                    <h5>L&K Dashboard</h5>
+                </div>           
+            </div>        
+        </div>
+        </div>
+    </div>    
+    <div class="row" id="main_row" style="visibility:hidden">
+        <div class="col-lg-12 connectPanels">
+            <div class="ibox ">
+                <div class="ibox-title" style="height:41px;">                    
+                    <div class="ibox-tools">                                            
+                            <select style="margin-top:-7px" class="form-control" required ng-model="selectedjrss" ng-change="onEventsChange()" ng-options="jrss as jrss.text for jrss in jrssCollection" style="width : 100%;">
+                            </select>                                
+                    </div>
+                    <div class="ibox-tools">
+                        <b>JRSS:</b> &nbsp;
+                     </div>                                           
+                </div>
+                <div class="ibox-content" ng-show="selectedjrss!=null">                    
+                    <div class="row">
+                        <div  id="pageloadingbounce" ng-show="loadingSignal">
+                            <div class="sk-spinner sk-spinner-three-bounce">
+                                <div class="sk-bounce1"></div>
+                                <div class="sk-bounce2"></div>
+                                <div class="sk-bounce3"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-9"> 
+                              <div class="animated" id="questionnaire_pane">
+                                <table  class="table ">
+                                <tbody >
+                                <tr>
+                                    <td class="qitems" style="border-top:none;">
+                                        <h3>                                          
+                                            {{paginationQuest.CurrentPage}}.)  &nbsp;{{currentQuest.title}}
+                                        </h3>
+                                        <accordion close-others="true">
+                                         <div accordion-group class="panel-default" is-open="status.isCustomHeaderOpen" ng-repeat="item in currentQuest.items" >
+                                            <accordion-heading>
+                                                {{item.value}}.   {{item.text}} <font color="#ff6666">({{getpractitionerbyanswer(item.value).length}})</font> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+                                            </accordion-heading>
+                                                <table  class="table ">
+                                                 <thead>
+                                                     <tr>
+                                                        <td></td>
+                                                        <td>Name</td>
+                                                        <td>Email</td>
+                                                     </tr>                                                        
+                                                 </thead>      
+                                                <tbody >                                                
+                                                <tr ng-repeat="practitioner in getpractitionerbyanswer(item.value)">
+                                                     <td>
+                                                         <div class="pracitioner-image-circle -background-alt -border-color-link" style="background-image: url(&quot;//faces.tap.ibm.com/imagesrv/{{ practitioner.user_id.email }}?&quot;);"></div>
+                                                     </td>
+                                                     <td>{{ practitioner.user_id.intranet_name }}</td>
+                                                     <td>{{ practitioner.user_id.email }}</td>
+                                                </tr>
+                                                </tbody>
+                                                </table>    
+                                            </div>
+                                        </accordion>   
+
+                                            <!-- 
+                                            <ul class="list-group">
+                                                <li class="list-group-item litems" ng-repeat="item in currentQuest.items">
+                                                    {{item.value}}.   {{item.text}}                                                
+                                                </li>
+                                            </ul>
+                                            -->                             
+                                    </td>
+                                </tr>
+                                </tbody>                      
+                                </table>
+                            </div> 
+                            <div class="row-sm-9  text-center">                           
+                                <pagination first-text="&nbsp;" last-text="&nbsp;" ng-change="pageChanged(paginationQuest.CurrentPage)" rotate="false" boundary-link-numbers="false" total-items="(questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="10" class="pagination-sm" boundary-links="true">                               
+                                </pagination>                             
+                            </div>
+                        </div>
+                        <div class="col-md-3" style="margin:8% auto"> 
+                            <canvas id="bar" class="chart chart-bar"
+                                chart-data="chart.data" chart-labels="chart.labels" chart-series="['Answer']" />
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>              
+        </div>
+       
+    </div>
+</div>
+
+</body>
+</html>

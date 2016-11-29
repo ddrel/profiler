@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Profiler</title>
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" href="/common/css/style-fcc.css"/>
+   <link rel="stylesheet" href="/profiler/css/sme.css"/>
+
+
+  <link rel="stylesheet" href="/common/css/animate.css"/>
+    <!-- Mainly scripts -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
+
+
+  <!-- Angular -->
+  <script src="/bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+  <!-- Toastr -->
+      <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+      <script type="text/javascript">
+      toastr.options = {
+          'closeButton': true,
+          'progressBar': true,
+          'timeOut': '0',
+          'extendedTimeOut': '500',
+          'showEasing': 'swing',
+          'hideEasing': 'linear',
+          'showMethod': 'fadeIn',
+          'hideMethod': 'fadeOut',
+          'timeOut' : '5000'
+      };
+      </script>
+
+  <script  src="/profiler/controllers/sme.js"></script>
+  <script src="/common/utils/utils.js"></script>
+  <script src="/common/service/dialog.js"></script>
+
+</head>
+<body class="gray-bg" ng-app="FCC" ng-controller="smeController" ng-init="init()">
+<div class="wrapper  animated fadeInRight" ng-controller="smeController" ng-init="init()">
+    <div  class="row">
+        <div class="col-lg-12">
+            <div class="ibox-title">
+                <div class="col-md-10">
+                    <h5>SME's Dashboard</h5>
+                </div>           
+            </div>        
+        </div>
+        </div>
+    </div>    
+    <div class="row">
+        <div class="col-lg-3 connectPanels">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Practitioners</h5>                    
+                </div>
+                <div class="ibox-content">
+              
+                </div>
+            </div>              
+        </div>
+        <div class="col-lg-3 connectPanels">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>My Assigned</h5>                    
+                </div>
+                <div class="ibox-content">
+              
+                </div>
+            </div>              
+        </div>
+        <div class="col-lg-6 connectPanels">
+            <div class="ibox ">
+                <div class="ibox-title">
+                    <h5>Question List</h5>                    
+                </div>
+                <div class="ibox-content">
+              
+                </div>
+            </div>              
+        </div>
+
+    </div>
+</div>
+
+</body>
+</html>

@@ -30,12 +30,13 @@ exports.create = (req, res)=> {
 
   var modelErrors = [];
   
-mongoose.model('jrss').findOne({intranet_id:user.email}).exec(function(err,doc){
+mongoose.model('jrss').findOne({intranet_id:user.email.toLowerCase()}).exec(function(err,doc){
   if(!err){
   var _jrss = doc && doc.JRSS;
   var _intranet_name = doc && doc.Name;
     user.jrss = _jrss || "";
     user.intranet_name = _intranet_name || "";
+    user.email = user.email.toLowerCase();
    
    user.save(function(err) {
     if (err) {

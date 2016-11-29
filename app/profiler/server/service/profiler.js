@@ -15,6 +15,39 @@ module.exports = (app)=>{
         profiler.savebulkAnswerProfiler(req,res);
     });
 
+    app.get('/ws/profiler/practitioners_count',(req,res)=>{
+        profiler.getPractionerStatus(req,res);
+    });
+
+    app.get('/ws/profiler/jrssgroupcount',(req,res)=>{
+        profiler.getjrssgroupcount(req,res);
+    });
+
+    app.get('/ws/profiler/getanswerbyjrss',(req,res)=>{
+        profiler.getpractitionerperquestion(req,res);
+    });
+
+    app.get('/ws/profiler/getpractitionernoresponse',(req,res)=>{
+        profiler.getpractitionernoresponse(req,res);
+    });
+
+    app.get('/ws/profiler/getPractionerByStatus',(req,res)=>{
+        profiler.getPractionerByStatus(req,res);
+    });
+
+    app.get('/ws/profiler/getPractionerByStatusDone',(req,res)=>{
+        profiler.getPractionerByStatusDone(req,res);
+    });
+
+    app.get('/ws/profiler/exportPerJrss',(req,res)=>{
+        profiler.exportPerJrss(req,res);
+    });
+    
+    
+
+
+    
+
 };
 
 

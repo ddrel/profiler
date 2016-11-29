@@ -24,7 +24,7 @@ module.exports = (passport)=>{
     },
     (email, password, done)=> {
        mongoose.model('User').findOne({
-        email: email
+        email: email.toLowerCase()
       }, (err, user)=> {
         if (err) {
           return done(err);

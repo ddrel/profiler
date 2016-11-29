@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Profiler</title>
+    <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/common/css/style.css"/>
+    <link rel="stylesheet" href="/common/css/animate.css"/>
+    
+    <!-- Mainly scripts -->
+    <script src="/bower_components/angular/angular.min.js"></script>
+    <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+     <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
+
+   <script  src="/profiler/controllers/practitionercount.js"></script>
+   <script src="/common/utils/utils.js"></script>
+   <script src="/common/service/dialog.js"></script>
+
+
+</head>
+<body class="gray-bg" ng-app="FCC" ng-controller="practionersController" ng-init="init()">
+<div class="wrapper wrapper-content  animated fadeInRight">    
+    <section>
+
+      <div class="row done">
+        <div class="col-md-12">
+            <table class="table table-bordered table-hover no-margins">
+                <thead>
+                    <tr>
+                        <td><b>JRSS</b></td>
+                        <td><b>No Response</b></td>
+                        <td><b>%</b></td>
+                        <td style="text-align:right;"><b>Done</b></td>
+                        <td style="text-align:right;"><b>%</b></td>
+                        <td style="text-align:right;"><b>Not yet done</b></td>
+                        <td style="text-align:right;"><b>Total</b></td>
+                        <td style="text-align:right;"><b>% Total</b></td>
+                    </tr>                    
+                </thead>
+                <tbody>
+                <tr ng-repeat ="jrss in jrssCollection">
+                    <td>{{jrss}} ( <font color="#006699">{{ getPractitionerCount(jrss) }}</font>)</td>
+                    <td><a ng-click="displayPractitioner('noresponse',jrss)"><font color="#006699">{{ getNoResponse(jrss).length }}</font></a></td>
+                    <td><font color="#006699">{{ getPercent(getNoResponse(jrss).length,getPractitionerCount(jrss)) }}</font></td>
+                    <td style="text-align:right;"><a style="color:#ff6666" ng-click="displayPractitioner('done_true',jrss)"><b>{{ getDone(jrss,true) }}</b></a`></td>
+                    <td style="text-align:right;">{{ getPercent(getDone(jrss,true),getPractitionerCount(jrss)) }}</b></td>
+                    <td style="text-align:right;"><a style="color:#ff6666" ng-click="displayPractitioner('done_false',jrss)"><b>{{ getDone(jrss,false) }}</b></a></td>
+                    <td style="text-align:right;color:#ff6666"><b>{{ getTotal(jrss) }}</b></td>
+                    <td style="text-align:right;color:#ff6666">{{ getPercent(getTotal(jrss),getPractitionerCount(jrss))  }}</td>
+                </tr>                
+                </tbody>
+               <tfoot>
+                   <tr>
+                       <td colspan="8" style="text-align:right;color:#ff6666"">
+                           <h2>Grand Total: &nbsp; <b>{{ grandTotal() }}</b></h2>
+                       </td>   
+                    </tr>   
+                </tfoot>    
+            </table>
+          
+        </div>        
+  </section>
+
+
+
+<section id="contact" class="gray-section contact">     
+    <div class="row">
+        <div class="col-lg-8 col-lg-offset-2 text-center m-t-lg m-b-lg">
+            <p><strong>&copy; 2016 IBM</strong><br/> The Profiler</p>
+        </div>
+    </div>      
+</section>
+
+</body>
+

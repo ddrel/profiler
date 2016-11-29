@@ -73,4 +73,31 @@
     }
 
     return questDialogDataService;
-  }]);
+  }])
+  .service('practitionersDialogService', ['$modal', function($modal) {
+    var practitionersDialogService = {};
+     practitionersDialogService.loadDialog = function(){
+      return $modal.open({
+          animation: true,
+          templateUrl: '/profiler/views/dialog/practitioner.html',
+          controller: 'practitionersDialogController',
+          backdrop: 'static'
+        });
+    };
+
+    return practitionersDialogService;
+  }
+])
+.service('practitionersDataDialogService', [ function() {
+    var practitionersDataDialogService = {};
+    var _selected = null;
+    practitionersDataDialogService.set =  function(obj){
+        _selected = obj;
+    }
+
+    practitionersDataDialogService.get =  function(){
+      return _selected;
+    }
+
+    return practitionersDataDialogService;
+  }])

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Profiler</title>
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+  <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/bower_components/jquery-ui/themes/smoothness/jquery-ui.css"/>
+  <link rel="stylesheet" href="/common/css/style-fcc.css"/>
+   <link rel="stylesheet" href="/profiler/css/sme.css"/>
+
+
+  <link rel="stylesheet" href="/common/css/animate.css"/>
+    <!-- Mainly scripts -->
+    <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/bower_components/Chart.js/Chart.js"></script>
+
+    <!-- jQuery UI -->
+    <script type="text/javascript" src="/bower_components/jquery-ui/jquery-ui.js"></script>
+
+
+  <!-- Angular -->
+  <script src="/bower_components/angular/angular.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-resource/angular-resource.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-map/ui-map.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-ui-utils/ui-utils.min.js?3l0qlcgzaor"></script>
+  <script type="text/javascript" src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+  <script type="text/javascript" src="/bower_components/angular-sanitize/angular-sanitize.min.js"></script>
+<script type="text/javascript" src="/bower_components/angular-chart.js/dist/angular-chart.js"></script>
+
+  <link href="/common/css/plugins/toastr/toastr.min.css" rel="stylesheet">
+  <!-- Toastr -->
+      <script type="text/javascript" src="/common/js/plugins/toastr/toastr.min.js"></script>
+      <script type="text/javascript">
+      toastr.options = {
+          'closeButton': true,
+          'progressBar': true,
+          'timeOut': '0',
+          'extendedTimeOut': '500',
+          'showEasing': 'swing',
+          'hideEasing': 'linear',
+          'showMethod': 'fadeIn',
+          'hideMethod': 'fadeOut',
+          'timeOut' : '5000'
+      };
+      </script>
+
+  <script  src="/profiler/controllers/profiler_report.js"></script>
+  <script src="/common/utils/utils.js"></script>
+  <script src="/common/service/dialog.js"></script>
+
+</head>
+<body class="gray-bg" ng-app="FCC" ng-controller="profilerReportController" ng-init="init()">
+<div class="wrapper  animated fadeInRight">
+    <div  class="row">
+        <div class="col-lg-12">
+            <div class="ibox-title">
+                <div class="col-md-10">
+                    <h5>L&K Dashboard</h5>
+                </div>           
+            </div>        
+        </div>
+        </div>
+    </div>    
+    <div class="row" id="main_row" style="visibility:hidden">
+        <div class="col-lg-12 connectPanels">
+            <div class="ibox ">
+                
+                <div class="ibox-title" style="height:41px;">                    
+                    <div class="ibox-tools">                                            
+                          <button style="margin-top:-7px" class="btn btn-primary" ng-click="export();" type="button">
+                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                              Export Current view to CSV
+                            </button>                               
+                    </div>                                                               
+                </div>                
+                <div class="ibox-content">                    
+                    <div class="row">
+                        <div  id="pageloadingbounce" ng-show="loadingSignal">
+                            <div class="sk-spinner sk-spinner-three-bounce">
+                                <div class="sk-bounce1"></div>
+                                <div class="sk-bounce2"></div>
+                                <div class="sk-bounce3"></div>
+                            </div>
+                        </div>
+                        <div class="col-md-4"> 
+                         <div class="row">
+                            <input type="text" class="form-control" ng-model="txtsearch" ng-change="filterPractitioner(txtsearch)"placeholder="Search Practitioner/jrss"></input>
+                         </div>
+
+                         <div class="row list-practitioner">
+                               <ul class="list-unstyled">
+                            <li ng-repeat = "profiler in jrssCollectionResult">
+                             <div>
+                                 <h5><a>
+                                     <i id="practitioner_toggle_{{$index}}" class="fa fa-plus-square" ng-click="selectjrss($index)" aria-hidden="true"></i>
+                                    <font ng-class="{'selected-item':currentSelectTextItem==profiler.jrss}" ng-click="selectedDisplay('jrss',profiler)">{{ profiler.text }}</font> 
+                                    </a>
+                                </h5>
+                             </div>
+                             <div class="practitioner-item" style="display:none;" id="practitioner_pane_{{$index}}">
+                                <table  class="table table-hover no-margins">                                            
+                                    <tbody >                                                
+                                    <tr ng-repeat="practitioner in profiler.practitioners"  class="tr-selection">
+                                        <td style="width:30px">
+                                            <div class="pracitioner-image-selection-circle -background-alt -border-color-link" style="background-image: url(&quot;//faces.tap.ibm.com/imagesrv/{{ practitioner.email }}?&quot;);"></div>
+                                        </td>
+                                        <td><font ng-click="selectedDisplay('practitioner',practitioner)" ng-class="{'selected-item':currentSelectTextItem==practitioner.intranet_name}" >{{ practitioner.intranet_name }}</font></td>                                       
+                                    </tr>
+                                    </tbody>
+                                </table>   
+                             </div>   
+                             </li>   
+                        </ul>     
+                          </div>      
+                         
+
+                                                 
+                        </div>
+                        <div class="col-md-8 " ng-show="selectedEvent!=null"> 
+                              <div class="animated left-pane-profile" id="questionnaire_pane" ng-if="currentSelectionFilter=='jrss'">
+                                <div class="row">
+                                    <div class="row">
+                                        <h2>JRSS: <b>{{ selectedEvent.title }}</b></h2>   
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <canvas id="bar" class="chart chart-bar"
+                                            chart-data="chart.data" chart-labels="chart.labels" chart-series="['Answer']" />
+                                        </div>                                         
+                                    </div>
+                                </div>                                   
+                                <div class="row">
+                                    <table  class="table ">
+                                    <tbody >
+                                    <tr>
+                                        <td class="qitems" style="border-top:none;">
+                                            <h3>                                          
+                                                {{paginationQuest.CurrentPage}}.)  &nbsp;{{currentQuest.title}}
+                                            </h3>
+                                            <accordion close-others="true">
+                                            <div accordion-group class="panel-default" is-open="status.isCustomHeaderOpen" ng-repeat="item in currentQuest.items" >
+                                                <accordion-heading>
+                                                    {{item.value}}.   {{item.text}} <font color="#ff6666">({{getpractitionerbyanswer(item.value).length}})</font> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+                                                </accordion-heading>
+                                                    <table  class="table ">
+                                                    <thead>
+                                                        <tr>
+                                                            <td></td>
+                                                            <td>Name</td>
+                                                            <td>Email</td>
+                                                        </tr>                                                        
+                                                    </thead>      
+                                                    <tbody >                                                
+                                                    <tr ng-repeat="practitioner in getpractitionerbyanswer(item.value)">
+                                                        <td>
+                                                            <div class="pracitioner-image-circle -background-alt -border-color-link" style="background-image: url(&quot;//faces.tap.ibm.com/imagesrv/{{ practitioner.user_id.email }}?&quot;);"></div>
+                                                        </td>
+                                                        <td>{{ practitioner.user_id.intranet_name }}</td>
+                                                        <td>{{ practitioner.user_id.email }}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                    </table>    
+                                                </div>
+                                            </accordion>                                                                         
+                                        </td>
+                                    </tr>
+                                    </tbody>                      
+                                    </table>
+                                </div> 
+                               
+                            </div> 
+                            <div class="animated left-pane-profile" id="questionnaire_pane"  ng-if="currentSelectionFilter=='practitioner'">
+                                <div class="row">
+                                    <table class="table no-margins">
+                                      <tr>
+                                          <td style="width:111px;padding:0px;">
+                                              <div class="-background-alt -border-color-link" style="border: 1px solid #e7eaec; height: 108px;margin-top: 8px;background-image: url(&quot;//faces.tap.ibm.com/imagesrv/{{ currentProfiler_practitioner.email }}?&quot;);"></div>
+                                          </td>
+                                          <td>
+                                              <table class="table table-bordered table-hover no-margins">                                       
+                                                <tbody>
+                                                <tr>
+                                                    <td>Name:</td>
+                                                    <td>{{ currentProfiler_practitioner.intranet_name }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Email:</td>
+                                                    <td>{{ currentProfiler_practitioner.email }}</td>
+                                                </tr>   
+                                                <tr>
+                                                    <td>JRSS:</td>
+                                                    <td>{{ currentProfiler_practitioner.jrss }}</td>
+                                                </tr>                                        
+                                                </tbody>
+                                            </table>
+                                          </td>    
+                                       <tr>     
+                                    </table>                                        
+                                </div>
+                                 <div class="row">
+                                    <table  class="table ">
+                                    <tbody >
+                                    <tr>
+                                        <td class="qitems" style="border-top:none;">
+                                            <h3>                                          
+                                                {{paginationQuest.CurrentPage}}.)  &nbsp;{{currentQuest.title}}
+                                            </h3> 
+                                            <div style=" padding-left: 38px;padding-top: 21px;">                                                 
+                                                    <div class="col-sm-1"><h4>Answer:</h4></div> 
+                                                    <div class="col-sm-11"><h4><font color="#337ab7"> {{ currentpractitioner_answer }}</font></h4></div>                                                     
+                                            </div>                                                                                                                      
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        
+                                     </tr>   
+                                    </tbody>                      
+                                    </table>
+                                </div>       
+                            
+                            </div>                               
+                             <div class="row-sm-9  text-center">                           
+                                    <pagination first-text="&nbsp;" last-text="&nbsp;" ng-change="pageChanged(paginationQuest.CurrentPage)" rotate="false" boundary-link-numbers="false" total-items="(questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="10" class="pagination-sm" boundary-links="true">                               
+                                    </pagination>                             
+                                </div>  
+                        </div>                      
+                    </div>
+                </div>
+            </div>              
+        </div>
+       
+    </div>
+</div>
+
+</body>
+</html>

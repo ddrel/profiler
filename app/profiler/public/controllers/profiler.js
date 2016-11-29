@@ -3,7 +3,7 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap'])
 
 var _isDirty =  null;
 $scope.user = {}
-$scope.questionnaire = {}
+$scope.questionnaire = []
 $scope.answerCollection = [];
 
 $scope.paginationQuest = {};
@@ -22,12 +22,11 @@ $scope.savingstatustext = "Submit";
  $scope.init =  function(){
     $http.get('/ws/profiler/getsurvey').success(function(resp){
            $scope.user = resp.user || {};
-           $scope.questionnaire = resp.questionnaire || {} 
+           $scope.questionnaire = resp.questionnaire || []; 
            
            var _answer = utilities.cache.getDataAnswer($scope.user.email);                     
            var ansCount = utilities.ObjSize(_answer);
-           if(ansCount>0){
-               console.log(_answer);               
+           if(ansCount>0){               
                $scope.currentQuest = $scope.questionnaire[ansCount];               
                $scope.answerCollection = _answer;
                $scope.paginationQuest.CurrentPage = ansCount + 1;
@@ -51,20 +50,20 @@ $scope.savingstatustext = "Submit";
 
 
  $scope.setSingleAnswer =  function(a,b){
-     if(!$scope.answerCollection[b._id]){
-            $scope.answerCollection[b._id] = a; 
-     }else{
-         $scope.answerCollection[b._id] = a;
-     }
-
-
     
-
-     utilities.cache.setDataAnswer($scope.user.email,$scope.answerCollection);
-     //console.log(utilities.cache.getDataAnswer($scope.user.email));
      $("#questionnaire_pane").removeClass("fadeInRight");     
 
      $timeout(function(){
+        if(!$scope.answerCollection[b._id]){
+                $scope.answerCollection[b._id] = a; 
+        }else{
+            $scope.answerCollection[b._id] = a;
+        }
+
+
+        utilities.cache.setDataAnswer($scope.user.email,$scope.answerCollection);
+
+
          var _cp = $scope.paginationQuest.CurrentPage
          if( _cp<$scope.questionnaire.length){
                 _cp+=1;
@@ -84,7 +83,7 @@ $scope.savingstatustext = "Submit";
 
          _isDirty = true;
 
-     },100);
+     });
      
  }     
 
