@@ -68,7 +68,13 @@
     <div class="row" id="main_row" style="visibility:hidden">
         <div class="col-lg-12 connectPanels">
             <div class="ibox ">
-                <div class="ibox-title" style="height:41px;">                    
+                <div class="ibox-title" style="height:41px;"> 
+                    <div class="ibox-tools">
+                       <button ng-show="selectedjrss!=null" style="margin-top:-7px;margin-left:2px;" class="btn btn-primary" ng-click="export();" type="button">
+                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>
+                              Export
+                            </button>
+                     </div>                   
                     <div class="ibox-tools">                                            
                             <select style="margin-top:-7px" class="form-control" required ng-model="selectedjrss" ng-change="onEventsChange()" ng-options="jrss as jrss.text for jrss in jrssCollection" style="width : 100%;">
                             </select>                                
@@ -98,7 +104,8 @@
                                         <accordion close-others="true">
                                          <div accordion-group class="panel-default" is-open="status.isCustomHeaderOpen" ng-repeat="item in currentQuest.items" >
                                             <accordion-heading>
-                                                {{item.value}}.   {{item.text}} <font color="#ff6666">({{getpractitionerbyanswer(item.value).length}})</font> <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
+                                                {{item.value}}.   {{item.text}} <font color="#ff6666">({{getpractitionerbyanswer(item.value).length}})</font>                                                                                                                               
+                                                <i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.isCustomHeaderOpen, 'glyphicon-chevron-right': !status.isCustomHeaderOpen}"></i>
                                             </accordion-heading>
                                                 <table  class="table ">
                                                  <thead>
@@ -106,6 +113,10 @@
                                                         <td></td>
                                                         <td>Name</td>
                                                         <td>Email</td>
+                                                        <td style="width:20px;padding:0px;">
+                                                            <a ng-show="getpractitionerbyanswer(item.value).length>0" style="margin-top:-2px" class="btn btn-primary" ng-click="exportbyAnswer(currentQuest,item,getpractitionerbyanswer(item.value));" type="button">
+                                                            <i class="fa fa-file-excel-o" aria-hidden="true"></i>                              
+                                                        </a></td>
                                                      </tr>                                                        
                                                  </thead>      
                                                 <tbody >                                                
@@ -114,7 +125,7 @@
                                                          <div class="pracitioner-image-circle -background-alt -border-color-link" style="background-image: url(&quot;//faces.tap.ibm.com/imagesrv/{{ practitioner.user_id.email }}?&quot;);"></div>
                                                      </td>
                                                      <td>{{ practitioner.user_id.intranet_name }}</td>
-                                                     <td>{{ practitioner.user_id.email }}</td>
+                                                     <td colspan="2">{{ practitioner.user_id.email }}</td>
                                                 </tr>
                                                 </tbody>
                                                 </table>    

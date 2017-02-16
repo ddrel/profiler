@@ -12,3 +12,16 @@ const jrssSchema = new Schema({
 },{ collection: 'jrss' });
 
 mongoose.model('jrss', jrssSchema);
+
+const scoringSchema = new Schema({
+    jrss: String,
+    event_ref:{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'event'
+    },
+    questionnaire:[],
+    proficiency_range:[]
+    
+},{ collection: 'scoring' });
+
+mongoose.model('scoring', scoringSchema);

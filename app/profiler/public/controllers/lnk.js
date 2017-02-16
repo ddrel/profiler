@@ -15,6 +15,21 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
     $scope.loadingSignal=false;
 
 
+    $scope.export = function(){
+         window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title);
+    }
+
+    $scope.exportbyAnswer = function(a,b,c){
+        var _csv = a.title + "\r\n";
+            _csv+= b.value  + ". " + b.text +"\r\n";
+            _csv+= "\r\n";
+            _csv+= "Name,Email" + "\r\n";
+            c.forEach(function(p){
+                _csv+= p.user_id.intranet_name.replace(/,/g,"").replace(".","") +  "," + p.user_id.email + "\r\n";
+            })
+            utilities.export.csv(a.title,_csv);
+    }
+
 
     $scope.init =  function(){       
         $timeout(function(){

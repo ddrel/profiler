@@ -44,7 +44,7 @@ module.exports = (app)=>{
     app.get("/lnk",(req,res)=>{
         if ( !req.user ){
                 res.redirect('/login');
-        } else if(req.user && (req.user.roles.indexOf("ADMIN") || req.user.roles.indexOf("LNK")))  {      
+        } else if(req.user && (req.user.roles.indexOf("ADMIN") || req.user.roles.indexOf("LNK") || req.user.roles.indexOf("SME")))  {      
             res.render("lnk");
         }else{
             var _page = req.user.profiler_done?"thankyoupage":"profiler";
@@ -67,5 +67,5 @@ module.exports = (app)=>{
         }
         
     });
-
+ 
 }

@@ -43,11 +43,19 @@ module.exports = (app)=>{
         profiler.exportPerJrss(req,res);
     });
     
+    app.get('/ws/profiler/gettechnicalscore',(req,res)=>{
+        profiler.getTechinicalScore(req,res);
+    });
+
+    app.get('/ws/profiler/getscoring',(req,res)=>{
+            profiler.getscoring(req,res);
+    });
+
+    app.post('/ws/profiler/savescoring',(req,res)=>{
+            profiler.savescoring(req,res);
+    });
+
     
-
-
-    
-
 };
 
 

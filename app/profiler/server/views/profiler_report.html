@@ -70,10 +70,13 @@
             <div class="ibox ">
                 
                 <div class="ibox-title" style="height:41px;">                    
-                    <div class="ibox-tools">                                            
-                          <button style="margin-top:-7px" class="btn btn-primary" ng-click="export();" type="button">
+                    <div class="ibox-tools">
+                        <Label>Export Current view to CSV:&nbsp;</label>
+                         <input type="radio" name="rdoexport" ng-model="selectedExport" value="short">Short version</input>                                            
+                         <input type="radio" name="rdoexport" ng-model="selectedExport" value="long">Complete &nbsp;</input>
+                          <button style="margin-top:-7px" class="btn btn-primary" ng-click="export(selectedExport);" type="button">
                             <i class="fa fa-file-excel-o" aria-hidden="true"></i>
-                              Export Current view to CSV
+                              Submit
                             </button>                               
                     </div>                                                               
                 </div>                
@@ -121,7 +124,9 @@
                                                  
                         </div>
                         <div class="col-md-8 " ng-show="selectedEvent!=null"> 
-                              <div class="animated left-pane-profile" id="questionnaire_pane" ng-if="currentSelectionFilter=='jrss'">
+                            <tabset>
+                            <tab heading="Details">
+                                <div class="animated left-pane-profile" id="questionnaire_pane" ng-if="currentSelectionFilter=='jrss'">
                                 <div class="row">
                                     <div class="row">
                                         <h2>JRSS: <b>{{ selectedEvent.title }}</b></h2>   
@@ -226,7 +231,81 @@
                              <div class="row-sm-9  text-center">                           
                                     <pagination first-text="&nbsp;" last-text="&nbsp;" ng-change="pageChanged(paginationQuest.CurrentPage)" rotate="false" boundary-link-numbers="false" total-items="(questionnaire.length * 10)" ng-model="paginationQuest.CurrentPage" max-size="10" class="pagination-sm" boundary-links="true">                               
                                     </pagination>                             
-                                </div>  
+                            </div>
+                            </tab>
+                            <tab heading="Practitioners Score" ng-if="currentSelectionFilter=='jrss'">
+                                 <div  id="pageloadingbounce" ng-show="loadingScores">
+                                        <div class="sk-spinner sk-spinner-three-bounce">
+                                            <div class="sk-bounce1"></div>
+                                            <div class="sk-bounce2"></div>
+                                            <div class="sk-bounce3"></div>
+                                        </div>
+                                </div>
+                                <table class="table table-bordered table-hover no-margins">
+                                    <tr>
+                                       <td ng-repeat="legend in technicalScores.define.legend">
+                                           <font color="#ff6666"><b>({{legend.value_min}} - {{legend.value_max}}) - {{ legend.text}}</b></font>  
+                                        </td>    
+                                    </tr> 
+                                </table>    
+                                <table class="table table-bordered table-hover no-margins">                                       
+                                    <thead>
+                                        <td></td>
+                                        <td>Name</td>
+                                        <td>Score</td>
+                                        <td>Proficiency</td>                                    
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="practscore in technicalScores.data">
+                                            <td style="width:30px">
+                                            <div class="pracitioner-image-selection-circle -background-alt -border-color-link" style="background-image: url(&quot;//faces.tap.ibm.com/imagesrv/{{ practscore.email }}?&quot;);"></div>
+                                            </td>
+                                            <td><font>{{ practscore.name }}</font></td>
+                                            <td><font>{{ practscore.v_score }}</font></td>
+                                            <td><font>{{ practscore.t_score }}</font></td>                                       
+                                    </tr>                                    
+                                    </tbody>
+                                </table>
+                            </tab>
+                            <tab heading="Manage Scores">
+                                    <table class="table table-bordered table-hover no-margins">
+                                        <tr>
+                                        <td ng-repeat="prof_range in scoresmanage.proficiency_range">
+                                            <font color="#ff6666"><b>{{ prof_range.text}} - (Max Value): </b></font><input type="number" ng-model="prof_range.max" placeholder="Max Value"></input>  
+                                            </td>    
+                                        </tr> 
+                                    </table>    
+                                    <table class="table table-bordered  no-margins">                                       
+                                    <tbody>
+                                        <tr ng-repeat="quest in scoresmanage.questionnaire">
+                                            <td colspan="3">
+                                                <table class="table table-hover"> 
+                                                    <tr>
+                                                        <td  style="background-color:#f5f5f6">{{quest.title}}</td>
+                                                        <td  style="background-color:#f5f5f6">Weight:&nbsp;<input type="number" ng-change="setscores(quest.weight,quest.items)" ng-model="quest.weight"></input></td>
+                                                        <td  style="background-color:#f5f5f6">Score</td>
+                                                    </tr>
+                                                    <tr ng-repeat = "item in quest.items">
+                                                        <td colspan="2">{{item.value}}.{{item.text}}</td>                                                        
+                                                        <td width="50px"><input style="width:50px" type="number" ng-model="item.score"></input></td>
+                                                    </tr>   
+                                                </table>
+                                              </td>                                          
+                                        </tr>                                    
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="3">
+                                                <button   class="btn btn-primary pull-right" ng-click="savescoring();" type="button">                                                
+                                                    Save Changes
+                                                </button> 
+                                            </td>    
+                                        </tr>    
+                                     </tfoot>   
+                                </table>  
+
+                            </tab>    
+                            </tabset>                           
                         </div>                      
                     </div>
                 </div>

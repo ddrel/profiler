@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const LocalStrategy = require('passport-local').Strategy
+const Schema    = mongoose.Schema;
+const ObjectId = mongoose.Types.ObjectId;
 
 module.exports = (passport)=>{
 // Serialize the user id to push into the session
@@ -9,9 +11,10 @@ module.exports = (passport)=>{
 
   // Deserialize the user object based on a pre-serialized token
   // which is the user id
-  passport.deserializeUser((id, done)=> {
+  passport.deserializeUser((id, done)=> {     
+     //console.log(new mongoose.mongo.ObjectId(id).toString());
      mongoose.model('User').findOne({
-      _id: id
+      _id: '581fa2c4c93514a428508ac2' 
     }, '-salt -hashed_password', (err, user)=> {
       done(err, user);
     });

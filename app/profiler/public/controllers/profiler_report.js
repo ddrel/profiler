@@ -17,6 +17,8 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
     $scope.currentQuest = [];
     $scope.currentpractitioner_answer =  null;
 
+    $scope.selectedExport="short";
+
     $scope.selectjrss =  function(a){
         var elem = $("#practitioner_pane_" + a);
         var toggle = $("#practitioner_toggle_" + a);
@@ -33,7 +35,8 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
     $scope.currentProfiler_practitioner = null;
     $scope.selectedDisplay= function(j,k){
     $scope.currentSelectionFilter=j;
-            console.log(k.jrss)
+            console.log(k.jrss);
+            //console.log(j);
         $scope.currentProfiler_jrss =  null;
         $scope.currentProfiler_practitioner = null;
         if(j=="jrss"){
@@ -47,10 +50,22 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
             $scope.currentProfiler_practitioner = k;   
             $scope.onPractitionerChange(k);
 
-        }
-        
+        };
+
+       // $scope.buildTechnicalReport(k.jrss);
+
+
+
+       /*
+        var techn = event.questionnaire.filter(function(d){
+                return d.title.indexOf("(TECHNICAL") > -1;
+            }).map(function(d){return d._id});
+
+        */    
     }
 
+
+    
     $scope.filterPractitioner =  function(k){
         if(k==""){$scope.jrssCollectionResult = $scope.jrssCollection;}
         if(k.length<2) return false;
@@ -202,7 +217,9 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
             $scope.chart.data.push(_a);
      }
 
+    $scope.scoresmanage = []; 
     $scope.selectedEvent = null;
+    $scope.technicalScores ={};
     $scope.onEventsChange =  function(j){
         //console.log($scope.selectedEvent);
         $scope.loadingSignal=true;
@@ -224,13 +241,60 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
                 $scope.getpractitionerbyquestion($scope.selectedEvent._id,$scope.currentQuest._id,_practitioners,function(data){
                     $scope.practitioners = data;
                     $scope.buildChart();                   
-                    $scope.loadingSignal=false;                    
+                    $scope.loadingSignal=false;
+                                        
                 });
 
             }
-        })        
+        });
+
+        //console.log(j.practitioners);
+        $scope.technicalScores.define = {};
+        $scope.technicalScores.data = [];
+        $scope.loadingScores=true;        
+        $timeout(function(){
+            $http.get("/ws/profiler/gettechnicalscore?event_id=" + $scope.selectedEvent._id).success(function(resp){                                   
+                $scope.technicalScores.define = resp.define;                
+                j.practitioners.forEach(function(_data){
+                      var idx = resp.data.map(function(d){return d.user_id}).indexOf(_data._id);      
+                      var prac = resp.data[idx];
+                      $scope.technicalScores.data.push({email:_data.email,name:_data.intranet_name,v_score:prac.v_score,t_score:prac.t_score});               
+                });            
+                $scope.loadingScores=false;
+            })
+
+        })
+
+        //get scoring collection
+        $timeout(function(){
+             $http.get("/ws/profiler/getscoring?event_id=" + $scope.selectedEvent._id).success(function(resp){
+                 //console.log(resp)
+                 $scope.scoresmanage =resp;
+             })                                   
+        });
+
     }
 
+    $scope.loadingScores=false;
+    $scope.setscores =  function(v,items){
+        var _d= 0;
+        items.forEach(function(o){                
+                o.score = _d;
+                _d+=parseInt(v);
+        })
+    }
+
+    $scope.savescoring =  function(){
+            console.log($scope.scoresmanage);
+            $http.post("/ws/profiler/savescoring",{scoring:$scope.scoresmanage}).success(function(resp){
+                //console.log(resp);
+                 if(resp.status){
+                    toastr.success("Successfully Saved");
+                 }else{
+                     toastr.error("Error Saving Scores");
+                 }
+             })     
+    }
 
     $scope.onPractitionerChange =  function(j){
         $timeout(function(){
@@ -255,18 +319,19 @@ var FCC = angular.module('FCC', ['ngSanitize','ui.bootstrap','chart.js'])
 
     
 
-    $scope.export =  function(){
+    $scope.export =  function(format){
+        if(!$scope.selectedEvent) return;
         if($scope.currentProfiler_practitioner){
             var _practitioners = $scope.currentProfiler_practitioner._id + ",";
-            window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title) + "&users=" + _practitioners;
+            window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title) + "&users=" + _practitioners + "&format=" + format;
         }else if($scope.currentProfiler_jrss && $scope.currentProfiler_jrss.filtered){
                 _practitioners = "";
                 $scope.currentProfiler_jrss.practitioners.forEach(function(u){
                 _practitioners+= u._id + ",";
                 });                   
-            window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title) + "&users=" + _practitioners;
+            window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title) + "&users=" + _practitioners + "&format=" + format;
         }else{
-            window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title);
+            window.location.href = "/ws/profiler/exportPerJrss?jrss=" + encodeURIComponent($scope.selectedEvent.title) + "&format=" + format;
         } 
 
         //utilities.export.csv(filename,csv);

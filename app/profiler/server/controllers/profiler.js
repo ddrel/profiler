@@ -97,7 +97,7 @@ exports.getprofileranswer =  function(req,res){
     });
 
 
-    
+
 }
 
 
@@ -270,6 +270,8 @@ exports.exportPerJrss = (req,res)=>{
     const event =   mongoose.model('event');
     var _jrss = decodeURIComponent(req.query.jrss);
     var _users = req.query.users;
+    var _format =req.query.format || "short";
+        _format = _format.toLowerCase();
        console.log(_jrss); 
     event.find({title:{$in:_jrss}
                     }).exec(function(err,_event){                       
@@ -284,32 +286,39 @@ exports.exportPerJrss = (req,res)=>{
                             }
 
                              console.log(qry);
+                             
                              answer.find(qry)    
                                 .populate("user_id","-_id email intranet_name")
-                                .select("-_id user_id answer.value question_id")    
+                                .select("-_id user_id answer.value question_id answer.text")    
                                 .exec(function(err,_answer){                                
                                 if(err) return res.status(500).json(err);
-                                var _fields = []
+                                var _fields = [];
+                                var _fieldsText = [];
                                 _fields.push('Practitioner');
+                                _fieldsText.push('Practitioner');
+
                                 var _data = [];
                                 var _user = [];
                                 for(var i=0;i<_event[0].questionnaire.length;i++){
-                                        var _f ='Q' + (i + 1);
+                                        var _f = 'Q'+ (i + 1);
                                         var _q = _event[0].questionnaire[i];
+                                        console.log(_f);
+                                        _fieldsText.push(_q.title.toString().replace(/,/g ,""));
                                         _fields.push(_f);                                        
                                         var _res = _answer.filter(function(d){return d.question_id == _q._id})
                                         _res.forEach(function(prac){
+                                            console.log(prac.answer);
                                             if(!_user[prac.user_id.email]){
                                                 _user[prac.user_id.email] = [];
                                                 var _objd = {};
                                                 _objd.Practitioner =  prac.user_id.intranet_name.replace(/,/g ,"")  
-                                                _objd[_f]=prac.answer.value
+                                                _objd[_f]= (_format=="short")?prac.answer.value: prac.answer.value  + ". "  + prac.answer.text.toString().replace(/,/g ,"");
                                                 _user[prac.user_id.email].push(_objd);
 
                                             }else{
                                                  var _objd = {};
                                                 _objd.Practitioner = prac.user_id.intranet_name.replace(/,/g ,"") ;
-                                                _objd[_f]=prac.answer.value
+                                                _objd[_f]= (_format=="short")?prac.answer.value:prac.answer.value  + ". "  + prac.answer.text.toString().replace(/,/g ,"");
                                                  _user[prac.user_id.email].push(_objd);   
                                             }                                            
                                         });                                       
@@ -336,7 +345,7 @@ exports.exportPerJrss = (req,res)=>{
                                 }
                                 
                                 var _final_row = "";
-                                _final_row = _fields.join(",");
+                                _final_row = (_format=="short")?_fields.join(","):_fieldsText.join(",");
                                 _final_row +="\r\n"; 
                                 _final_row += _data_row;
 
@@ -357,9 +366,159 @@ exports.exportPerJrss = (req,res)=>{
 
 }
 
+/*
+exports.getTechinicalScore =  (req,res)=>{
+    //console.log(req.query.event_id);
+    mongoose.model('event').findOne({_id:req.query.event_id}).exec(function(err,event){
+        if(!err && event){
+            var techn = event.questionnaire.filter(function(d){
+                return d.title.indexOf("(TECHNICAL") > -1;
+            }).map(function(d){return d._id});
+
+            var _cquestion= techn.length;
+            //console.log(_cquestion);
+            var _wscore = {A:0,B:1,C:2,D:3,E:4};
+            //can be optimize by d3.quantile
+            var _quantile =  function(a,b){
+                    var _a = b / 4;
+                        //level1
+                        if(a<=_a){
+                            return "Entry";
+                        }else if(a>=_a&& a<=(_a*2)){
+                            return "Foundation";    
+                        }else if(a>=(_a*2)&& a<=(_a*3)){
+                            return "Intermidiate"; 
+                        }else if(a>(_a *3) ){
+                            return "Advanced";
+                        }
+            }
+
+            var _q_definition =  function(b){
+                var _a = parseInt(b / 4);
+                return [
+                        {text:"Entry",value_min:"0",value_max:_a},
+                        {text:"Foundation",value_min:(_a + 1),value_max:(_a * 2)},
+                        {text:"Intermidiate",value_min:(_a * 2 + 1 ),value_max:(_a * 3)},
+                        {text:"Advanced",value_min:(_a * 3 + 1),value_max: ">"}
+                        ]
+            }
+
+            //get answers
+        mongoose.model('answer').find({ question_id:{$in:techn}},(err,answer)=>{           
+           if(err && answer.length==0) return res.status(200).json({});
+           //get user associated with jrss
+            mongoose.model('User').find({ jrss:event.title,profiler_done:true},(err,user)=>{
+                var _maxScore = (_cquestion * 5);
+                var _techscore = {};                
+                _techscore.define = {}
+                _techscore.define.question_count = _cquestion
+                _techscore.define.maxScore = _maxScore
+                _techscore.define.legend = _q_definition(_maxScore)                                        
+                _techscore.data = [];
+
+                    user.forEach(function(_user){                        
+                            var _a = answer.filter(function(d){return d.user_id.toString()==_user._id});
+                            //console.log(_a.length + "  " +  _a)
+                            var _mscore = 0;
+                            _a.forEach(function(v){
+                                _mscore += _wscore[v.answer.value];       
+                            });
+
+                    var _data = {user_id:_user._id,v_score:_mscore,t_score:_quantile(_mscore,_maxScore)};                    
+                    _techscore.data.push(_data);
+                  });             
+                  return res.status(200).json(_techscore);
+            });//user
+            });//answer
+        }
+
+    });
+}
+*/
+
+exports.getTechinicalScore =  (req,res)=>{
+    //console.log(req.query.event_id);
+    mongoose.model('scoring').findOne({event_ref:req.query.event_id}).exec(function(err,scoring){
+        if(!err && scoring){
+            var techn = scoring.questionnaire.map(function(d){return d._id});
+
+            var _proficiency_range = []
+                scoring.proficiency_range.forEach(function(d){                            
+                   var _min = _proficiency_range.length==0? 0: (_proficiency_range[_proficiency_range.length-1].value_max + 1);
+                   _proficiency_range.push({value_min:_min,value_max:d.max,text:d.text});                     
+                })
+
+            var _quantile =  function(a,b){
+                var _t="";
+                        b.forEach(function(p){
+                                if((a >= p.value_min) && (a<=p.value_max)){
+                                    _t =  p.text;
+                                }
+                        });
+
+                        return _t;
+            }
 
 
+              //get answers
+            mongoose.model('answer').find({ question_id:{$in:techn}},(err,answer)=>{           
+                if(err && answer.length==0) return res.status(200).json({});
+                mongoose.model('User').find({ jrss:scoring.jrss,profiler_done:true},(err,users)=>{
+                    var _techscore = {};                
+                    _techscore.define = {}
+                    _techscore.define.question_count = techn.length;
+                    _techscore.define.legend = _proficiency_range;                                        
+                    _techscore.data = [];
 
+                    users.forEach(function(_user){
+                         var _a = answer.filter(function(d){return d.user_id.toString()==_user._id});                            
+                            var _mscore = 0;
+                            _a.forEach(function(v){
+                                //_mscore += _wscore[v.answer.value];
+                                 var idq = scoring.questionnaire.map(function(d){return d._id}).indexOf(v.question_id);   
+                                 if(idq>-1){
+                                        //scoring details
+                                        var qd = scoring.questionnaire[idq];
+                                        //answer details
+                                          var _idv =  qd.items.map(function(d){return d.value}).indexOf(v.answer.value);
+                                             if(_idv>-1){
+                                                       _mscore +=  (qd.weight * qd.items[_idv].score) / qd.weight;
+                                             }
+                                 }
+                            });
 
+                              var _data = {user_id:_user._id,v_score:_mscore,t_score:_quantile(_mscore,_proficiency_range)};                    
+                                _techscore.data.push(_data);
+                    });  
+
+                    return res.status(200).json(_techscore);
+                })
+            });            
+        }
+    });
+}
+
+exports.getscoring = (req,res)=>{
+    mongoose.model("scoring").findOne({event_ref:req.query.event_id}).exec((err,doc)=>{
+        if(err) res.status(500).json(err);         
+        res.status(200).json(doc);        
+    });
+};
+
+exports.savescoring = (req,res)=>{
+    var _scoring = req.body.scoring;        
+    mongoose.model("scoring").findOne({event_ref:_scoring.event_ref}).exec((err,doc)=>{
+            doc.proficiency_range = [];
+            doc.questionnaire = [];
+            doc.proficiency_range = _scoring.proficiency_range; 
+            doc.questionnaire = _scoring.questionnaire;            
+            doc.save(function(err){
+                if(err) res.status(500).json(err);         
+                res.status(200).json({status:"save"});
+            })
+             
+                  
+    });
+};
 
 
