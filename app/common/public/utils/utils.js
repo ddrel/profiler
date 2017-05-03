@@ -150,6 +150,18 @@ FCC.factory('utilities', ['$window','$rootScope',function ($window, $rootScope) 
                                     "Packaged Application Enablement Specialist-Oracle.Customer Care & Billing",
                                     "Package Solution Consultant-Oracle.Customer Care & Billing",
                                     "Test Specialist-Automation Tools",
+                                    "Application Architect-SAP",
+                                    "Application Architect-SAP.BA.Basis",
+                                    "Application Architect-SAP.Basis.Solution Manager",
+                                    "Application Architect-SAP.Security",
+                                    "Application Architect-Security",
+                                    "Architect-SAP",
+                                    "Architect-SAP.Basis.Solution Manager",
+                                    "Architect-SAP.Security",
+                                    "Application Developer-Web Services/SOA",
+                                    "Application Architect-Web Services/SOA",
+                                    "Application Consultant-Web Services/SOA",
+                                    "System Engineering Professional-Web Services/SOA"
                                 ]
 
       return utilities;

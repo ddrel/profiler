@@ -14,7 +14,7 @@ module.exports = (passport)=>{
   passport.deserializeUser((id, done)=> {     
      //console.log(new mongoose.mongo.ObjectId(id).toString());
      mongoose.model('User').findOne({
-      _id: '581fa2c4c93514a428508ac2' 
+      _id: id 
     }, '-salt -hashed_password', (err, user)=> {
       done(err, user);
     });
